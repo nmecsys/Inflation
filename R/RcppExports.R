@@ -5,7 +5,3 @@ acum <- function(data, data2, n, m) {
     .Call('INFLATION_acum', PACKAGE = 'INFLATION', data, data2, n, m)
 }
 
-rcpp_hello <- function() {
-    .Call('INFLATION_rcpp_hello', PACKAGE = 'INFLATION')
-}
-

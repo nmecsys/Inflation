@@ -33,3 +33,7 @@ NumericVector acum(NumericMatrix data, NumericMatrix data2, int n, int m) {
 
     return data;
 }
+
+///*** R
+//timesTwo(42)
+//*/
