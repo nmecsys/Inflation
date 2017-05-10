@@ -5,6 +5,20 @@
 
 using namespace Rcpp;
 
+// acum
+NumericVector acum(NumericMatrix data, NumericMatrix data2, int n, int m);
+RcppExport SEXP INFLATION_acum(SEXP dataSEXP, SEXP data2SEXP, SEXP nSEXP, SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type data2(data2SEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(acum(data, data2, n, m));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_hello
 List rcpp_hello();
 RcppExport SEXP INFLATION_rcpp_hello() {

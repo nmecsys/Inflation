@@ -2,29 +2,25 @@
 #' @export
 acum12 <- function(x){
     # x: ts
-    if (! is.mts(x)){ n <- length(x); } else{ n <- length(x[,1]); m <- length(x[1,])}
+    if (! is.mts(x)){ n <- length(x); m <- 1
+                      dim(x) <- c(length(x),1);
+    } else{ n <- nrow(x); m <- ncol(x)}
 
 
-    data <- data.frame(x)
+    data <- x
     data2 <- data/100 + 1
-    data <- data[13:n,]
+    data <- ts(as.matrix(data[13:n,]),
+               start = c(start(x)[1],start(x)[2]), frequency = frequency(x))
+
+    #browser()
+
+    data=INFLATION::acum(data = data, data2 = data2 , n = n, m=m)
 
 
-    #data2$w <- rep(NA, n)
-    #data2$z <- rep(NA, n)
+    data <- tibble::as_data_frame(data)
 
-
-    for(i in n:13){
-        data[(i-12),] <-  data2[i,]*data2[i-1,]*data2[i-2,]*
-            data2[i-3,]*data2[i-4,]*data2[i-5,]*data2[i-6,]*
-            data2[i-7,]*data2[i-8,]*data2[i-9,]*data2[i-10,]*data2[i-11,]
-    }
-
-
-
-
-    data$z <- (data$w - 1)*100
-    st <- ts(data$z, start = start(x), end = end(x), freq = 12)
+    data <- (data - 1)*100
+    st <- ts(data, start = start(x), end = end(x), freq = 12)
     st
 }
 
