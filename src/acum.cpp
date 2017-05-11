@@ -35,5 +35,7 @@ NumericVector acum(NumericMatrix data, NumericMatrix data2, int n, int m) {
 }
 
 ///*** R
-//timesTwo(42)
+//t1 <- acum12(x)
 //*/
+
+
