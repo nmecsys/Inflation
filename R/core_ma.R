@@ -10,12 +10,16 @@
 #' @examples
 #' \dontrun{
 #'
-#' sub = a$ipca_ts
-#' pesos = a$pesos_ts
-#' core1 <- core.ma(sub, pesos)
+#' load("~/INFLATION/data/codigos.rda")
+#' load("~/INFLATION/data/pesos.ts.rda")
+#' load("~/INFLATION/data/variacao.ts.rda")
+#' codigos <- codigos[2:nrow(codigos),]
+#' core1 <- core.ma(sub=variacao.ts$subitens, pesos = pesos.ts$subitens, inf = 20, sup = 20,
+#' suave = FALSE, janela = 12)
 #'
+#' # gráficos
+#' ts.plot(variacao.ts$ipc, core1$core, col = c(1:2), lwd = 1:2)
 #' }
-#'
 
 core.ma <- function(sub, pesos, inf = 20, sup = 20, suave = FALSE, janela = 12){
 
