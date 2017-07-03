@@ -1,0 +1,45 @@
+---
+title: "INFLATION"
+author: "Fernando Teixeira"
+date: "3 de julho de 2017"
+output: html_document
+---
+
+## Abstract
+
+The INFLATION package provides functions to estimate the core inflation.
+
+## 1. Introduction
+
+
+## 2. Related Software
+
+Search for related R and other language packages. I searched for R packages already and did not find one related.
+
+
+## 3. Existent Methods
+
+* core.ex - exclusion
+* core.ma - trimmed
+* core.dp - double weighting
+
+## 4. What we propose
+
+We describe here the step-by-step core method calculations with its formula. We bring up why this method is better than the other theoretically.
+
+Include the implementation's details.
+
+We provide database (IBGE) to users.
+
+## 5. Application
+
+We show with real data, plots and measurements why this method outperforms the others.
+
+## 6. Usage
+
+We provide a vignette-like how to operate the package.
+
+
+
+
+
