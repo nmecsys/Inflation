@@ -1,0 +1,48 @@
+---
+author:
+  - name: Fernando Teixeira
+    affiliation: Getulio Vargas Foundation
+    address: >
+      First line
+      Second line
+    email: \email{fernando.teixeira@fgv.br}
+    url: http://rstudio.com
+  - name: Second Author
+    affiliation: Affiliation
+title:
+  formatted: "Triple Filter Core Inflation: measuring inflation trajectory with \\pkg{INFLATION}"
+  # If you use tex in the formatted title, also supply version without
+  plain:     "Triple Filter Core Inflation: measuring inflation trajectory with Package INFLATION"
+  # For running headers, if needed
+  short:     "\\pkg{foo}: A Capitalized Title"
+abstract: >
+  The abstract of the article.
+keywords:
+  # at least one keyword must be supplied
+  formatted: [keywords, not capitalized, "\\proglang{R}"]
+  plain:     [keywords, not capitalized, R]
+preamble: >
+  \usepackage{amsmath}
+output: rticles::jss_article
+---
+
+# Introduction
+
+This template demonstrates some of the basic latex you'll need to know to create a JSS article.
+
+## Code formatting
+
+Don't use markdown, instead use the more precise latex commands:
+
+* \proglang{Java}
+* \pkg{plyr}
+* \code{print("abc")}
+
+# R code
+
+Can be inserted in regular R markdown blocks.
+
+```{r}
+x <- 1:10
+x
+```

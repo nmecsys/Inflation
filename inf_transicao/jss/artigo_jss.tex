@@ -1,0 +1,83 @@
+\documentclass[article]{jss}
+\usepackage[utf8]{inputenc}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\author{
+Fernando Teixeira\\Getulio Vargas Foundation \And Second Author\\Affiliation
+}
+\title{Triple Filter Core Inflation: measuring inflation trajectory with
+\pkg{INFLATION}}
+
+\Plainauthor{Fernando Teixeira, Second Author}
+\Plaintitle{Triple Filter Core Inflation: measuring inflation trajectory with
+Package INFLATION}
+\Shorttitle{\pkg{foo}: A Capitalized Title}
+
+\Abstract{
+The abstract of the article.
+}
+
+\Keywords{keywords, not capitalized, \proglang{R}}
+\Plainkeywords{keywords, not capitalized, R}
+
+%% publication information
+%% \Volume{50}
+%% \Issue{9}
+%% \Month{June}
+%% \Year{2012}
+%% \Submitdate{}
+%% \Acceptdate{2012-06-04}
+
+\Address{
+    Fernando Teixeira\\
+  Getulio Vargas Foundation\\
+  First line Second line\\
+  E-mail: \email{fernando.teixeira@fgv.br}\\
+  URL: \url{http://rstudio.com}\\~\\
+    }
+
+\usepackage{amsmath}
+
+\begin{document}
+
+\section{Introduction}\label{introduction}
+
+This template demonstrates some of the basic latex you'll need to know
+to create a JSS article.
+
+\subsection{Code formatting}\label{code-formatting}
+
+Don't use markdown, instead use the more precise latex commands:
+
+\begin{itemize}
+\tightlist
+\item
+  \proglang{Java}
+\item
+  \pkg{plyr}
+\item
+  \code{print("abc")}
+\end{itemize}
+
+\section{R code}\label{r-code}
+
+Can be inserted in regular R markdown blocks.
+
+\begin{CodeChunk}
+
+\begin{CodeInput}
+R> x <- 1:10
+R> x
+\end{CodeInput}
+
+\begin{CodeOutput}
+ [1]  1  2  3  4  5  6  7  8  9 10
+\end{CodeOutput}
+\end{CodeChunk}
+
+
+
+\end{document}
+

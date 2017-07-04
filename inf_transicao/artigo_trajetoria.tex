@@ -1,0 +1,675 @@
+\documentclass[10pt]{article}
+
+% formatação do documento -----------------------------------------------------
+% ajustar margem
+\usepackage[top=3cm, bottom=3cm, left=2.5cm, right=2.5cm]{geometry}
+
+% fonte tipo times new
+\usepackage{mathptmx}
+\usepackage{multirow}
+
+% funcionar caracteres em português
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyphenat} 
+%\usepackage[portuguese]{babel}
+
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+%\setcounter{tocdepth}{3}
+
+% formatação códigos R
+\newcommand{\pkg}[1]{{\normalfont\fontseries{b}\selectfont #1}}
+\let\proglang=\textsf
+\let\code=\texttt
+
+% espaçamento duplo
+\usepackage{setspace}
+\onehalfspace 
+
+% título e autores do artigo
+\title{\textbf{Triple-Filter core inflation: a measure of the inflation trajectory}}
+
+\author{
+  \textbf{Pedro Costa Ferreira} \\
+  \small{FGV/IBRE}
+  \and
+  \textbf{Daiane M. de Mattos}\\
+  \small{FGV/IBRE}
+  \and
+  \textbf{Vagner Laerte Ardeo}\\
+  \small{FGV/IBRE}
+}
+
+\date{}
+
+% permitir links e formatá-los
+\usepackage{hyperref}
+\hypersetup{colorlinks = true, linkcolor = black, citecolor = black, urlcolor = black}
+
+% referências
+\usepackage[round]{natbib}
+% editar fonte do artigo para Times New Roman
+
+% não permitir parágrafo
+\usepackage{indentfirst}
+
+% código verbatim
+\usepackage{fancyvrb}
+\fvset{formatcom=\singlespacing} % espaço simples
+
+% múltiplas figuras
+\usepackage{graphicx}
+%\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[font={footnotesize}]{caption}
+
+
+\usepackage{floatrow}
+%\DeclareFloatFont{tiny}{\tiny}% "scriptsize" is defined by floatrow, "tiny" not
+\floatsetup[table]{font=small}
+\usepackage{booktabs}
+\usepackage[flushleft]{threeparttable}
+
+% operadores matemáticos
+\usepackage{amsmath}
+\usepackage{xfrac}
+% início do documento ---------------------------------------------------------
+\usepackage{Sweave}
+\begin{document}
+\input{artigo_trajetoria-concordance}
+
+\maketitle % aparecer o título e o autor
+
+
+
+
+% {\let\thefootnote\relax\footnotetext{\textsuperscript{*}Instituto Brasileiro de Economia (IBRE|FGV), R. Barão de Itambi, Botafogo, Rio de Janeiro, Brasil; \\
+% tel: +55 21 3799-6751; E-mails: \texttt{pedro.guilherme@fgv.br}; \texttt{daiane.mattos@fgv.br}; \texttt{andre.braz@fgv.br}.}}
+
+
+\textbf{Abstract}: In countries with high inflation, as is the case of Brazil, the traditional cores inflation do not seem to deliver much information about the general level of prices. Therefore, we present a new measure, the Triple-Filter core inflation, which filters inflation in three ways: trimmed mean with smoothed items, seasonal adjustment and moving averages. The results allow us to say that the Triple-Filter core inflation, in addition to providing more information about the inflation trajectory than traditional core inflation, provides a more up-to-date view on the state of inflation than the accumulated inflation over 12 months.
+
+% As medidas de núcleo de inflação têm sido utilizadas por autoridades monetárias como ferramenta para medir a estabilização dos preços. Em países com inflação elevada, como é o caso do Brasil, no entanto, os núcleos tradicionais não parecem trazer muita informação sobre o nível geral dos preços. Mostra-se que as medidas apresentam viés, resultando na subestimação da tendência da inflação, fraca capacidade de atração e previsão da inflação (características indesejáveis segundo a literatura de núcleo de inflação). Por isso, apresenta-se uma nova medida, o núcleo triplo filtro, que filtra a inflação de três maneiras: médias aparadas, ajuste sazonal e médias móveis.  Os resultados permitem dizer que o núcleo triplo filtro, além de trazer mais informação a respeito da trajetória da inflação do que os núcleos tradicionais, fornece uma visão mais atual sobre o estado da inflação do que a inflação acumulada em 12 meses (medida comumente usada pelo público em geral no Brasil para avaliar a trajetória da inflação).
+
+
+\textbf{Keywords}: CPI, core inflation, smoothed trimmed mean, moving average, seasonal adjustment.
+
+%\newpage
+
+
+% introducao -----------------------------------------------------------------------
+\section{Introduction}\label{intro}
+
+%\noindent
+%\textbf{\textit{A ideia de núcleo de inflação}}\vspace{0.3cm}
+
+The core inflation measures are used by monetary authorities as a tool to measure the stabilization of prices in the economy. Despite being a popular term among policymakers, there is still no consensus on its definition nor on what it plans to capture. The consensus is that the change in the price level, despite being a monetary phenomenon, can be influenced also by non-monetary events such as, for example, bad weather conditions that make food prices more expensive because of a reduced supply of these products to the population. However, since this event is temporary, with an improving climate food prices may fall again. This transient behavior thus adds noise to the inflation rate and, therefore, the monetary authorities should be able to distinguish between a transient effect and a persistent effect on the price level when making their decisions. Given this, an inflation measure free of such interference is desirable.
+
+%As medidas de núcleo de inflação são utilizadas por autoridades monetárias como ferramenta para medir a estabilização dos preços da economia. Apesar de ser um termo bastante popular entre os formuladores de política monetária, ainda não há um consenso sobre sua definição nem sobre o que pretende captar. O que se tem como consenso é que a mudança no nível dos preços, apesar de ser um fenômeno monetário, pode ser influenciada também por eventos não-monetários como, por exemplo, péssimas condições climáticas que tornam os preços dos alimentos mais caros em razão da diminuição da oferta desses produtos para a população. No entanto, por esse evento ser passageiro, com a melhoria do clima, os preços dos alimentos podem voltar a cair. Esse comportamento transitório, por conseguinte, adiciona ruído ao índice da inflação e, portanto, as autoridades monetárias deveriam ser capazes de distinguir entre um efeito transitório e um efeito persistente no nível dos preços para o exercício de suas decisões. Diante disso, é desejável uma medida de inflação livre de tais interferências.
+
+A measure of inflation free of such noise, which aims to show the persistent price movement or, in other words, the inflation trend, can be understood as the core inflation \citep{bryan1994}. Thus, efforts are directed to identify and remove such noise of aggregate inflation. In the 1970s, the core was understood as inflation after removing the food and energy components (\textit{CPI less food and energy} of the United States), precisely because they are very volatile components. Over time, however, several other authors suggested ways of removing the noise from the rate of inflation. \cite{bryan1994}, for example, suggested estimators of limited influence (median and trimmed inflation) to calculate inflation. Such estimators are more robust to extreme variations that add noise to inflation, and allow a more satisfactory measure for the persistent component of inflation as compared to the core excluding the food and energy items. \cite{dow1994} suggested not to delete any price calculation but to recalculate its weight in proportion to the inverse of its volatility (double weight). So very volatile items have low weight in the calculation of the core inflation. In 2002,  \citeauthor{cogley2002} showed that the cores estimated by methods already cited still preserved high frequency variations and therefore suggested an exponential smoothing-based method that returned a measure of inflation softer than the alternative measures. There are still other estimated cores for other statistical models, such as \cite{quah}, that used multivariate systems in terms of other macro-economic variables to extract the trend of inflation and \cite{sinclair} and \cite{stock}, who used models of unobservable components to estimate the core.
+
+
+%Uma medida de inflação livre de ruídos, que visa mostrar o movimento persistente dos preços ou, em outras palavras, a tendência da inflação, pode ser entendida como o núcleo de inflação \citep{bryan1994}. Dessa forma, os esforços se direcionam para identificar e remover tal ruído da inflação agregada. Na década de 1970, o núcleo era entendido como a inflação após a remoção das componentes alimentação e energia (núcleo \textit{CPI less food and energy} dos Estados Unidos), justamente por serem componentes muito voláteis. Com o passar do tempo, no entanto, diversos autores sugeriram outras maneiras de remover o ruído do índice da inflação. \cite{bryan1994}, por exemplo, sugeriram estimadores de influência limitada (inflação mediana e médias aparadas) para o cálculo da inflação. Tais estimadores são mais robustos a variações extremas, que adicionam ruído a inflação, e permitiram uma medida mais satisfatória para a componente persistente da inflação em comparação ao núcleo que exclui os itens de alimentação e de energia. \cite{dow1994} sugeriu não excluir nenhum preço do cálculo e sim recalcular seu peso proporcionalmente ao inverso de sua volatidade (dupla ponderação). Assim, itens muito voláteis teriam baixo peso no cálculo da inflação. Em 2002, \citeauthor{cogley2002} mostrou que os núcleos estimados pelos métodos já citados ainda preservavam variação de alta frequência e, por isso, sugeriu um método baseado em suavização exponencial que retornava uma medida de inflação mais suave do que as medidas alternativas. Há ainda outros núcleos estimados por outros modelos estatísticos como, por exemplo, \cite{quah}, que utilizaram sistemas multivariados em função de outras variáveis macroeconômicas para extrair a tendência da inflação, e \cite{sinclair} e \cite{stock}, que fizeram uso de modelos de componentes não observáveis para estimar o núcleo.
+
+As can be seen, there are different methods that allow an estimation of the trend of inflation. However, the construction of a core alone does not guarantee its usefulness, and, on this basis, scholars have proposed methods to qualify the performance of these measures \citep{wynne,todd,frb}. Generally, the following characteristics in a core inflation are expected: (a) \textit{Low volatility}: it is expected that the core is less volatile than the aggregate inflation; (b) \textit{Transparency and communication with the public}: it is desirable that the core is easy to replicate and to explain to the public, making the presentation of the core dialogue simpler. As shown \cite{tito2014}, most core inflations disclosed by central banks in the world are of the exclusion, double weight or trimmed mean types. Few institutions have more complex statistical methods to calculate the core, and if such are presented, also disclose the simplest core inflation; (c) \textit{Historical review}: it is expected that the measure does not require an historical review, that is, does not change the past or its tendency with the insertion of new data. This makes a consistent history of inflation counted using the core inflation; (d) \textit{Capture the inflation trend}: according to \cite{todd}, for a core measure to capture the trend of inflation, the core and headline inflation should present similar means, ensuring that the core does not overestimate or underestimate the long-term trend of inflation, and the trajectory of the core must follow closely the headline inflation trend. Thus, when the trend of inflation rises, so will the core. The procedures applied for the evaluation of these two criteria can be found in more detail in \cite{todd,cogley2002,frb}; (e) \textit{Inflation forecasting}: It is also expected the core will help in inflation forecasts, although the literature shows that this is not a trivial task. However, some authors (\cite{todd,cogley2002,frb}) used a simple linear regression to assess whether the difference between the core and the headline inflation in the current time helps predict how much headline inflation will change from the current time to a few months from now.
+
+%Como se pode observar, há diferentes métodos que permitem uma estimativa da tendência da inflação. No entanto, a construção de um núcleo por si só não garante a sua utilidade, e, com base nisso, os estudiosos propuseram métodos para qualificar o desempenho dessas medidas \citep{wynne,todd,frb}. Geralmente, são esperadas as seguintes características em um núcleo de inflação: (a) \textit{Baixa volatilidade}: espera-se que o núcleo seja menos volátil do que a inflação agregada; (b) \textit{Transparência e comunicação com o público}: é desejável que o núcleo seja fácil de replicar e de se explicar para o público, tornando o diálogo da apresentação do núcleo mais simples. Como mostrou \cite{tito2014}, a maioria dos núcleos divulgados pelos bancos centrais no mundo são do tipo exclusão, dupla ponderação ou médias aparadas. Poucas instituições apresentam métodos estatísticos mais complexos para o cálculo do núcleo, e se o apresentam, divulgam também os núcleos mais simples; (c) \textit{Revisão histórica}: espera-se que a medida não necessite de revisão histórica, isto é, não mude o passado ou sua tendência a partir da inserção de novos dados. Isso torna consistente a história da inflação contada através de um núcleo. (d) \textit{Capturar a tendência da inflação}: de acordo com \cite{todd}, para que uma medida de núcleo capture a tendência da inflação, o núcleo e a inflação devem apresentar médias similares, garantindo que o núcleo não superestime ou subestime a tendência de longo prazo da inflação, e a trajetória do núcleo deve caminhar próximo a tendência da inflação. Assim, quando a tendência da inflação se elevar, o mesmo acontecerá com o núcleo. Os procedimentos aplicados para a avaliação desses dois critérios podem ser encontrados com mais detalhes em \cite{todd,mehra,tito2011}; (e) \textit{Previsão da inflação}: também é esperado que o núcleo ajude na previsão da inflação, apesar de a literatura mostrar que esta não é uma tarefa trivial. No entanto, alguns autores (\cite{todd,cogley2002,frb}) utilizaram uma regressão linear simples que permite avaliar se a diferença entre o núcleo e a inflação agregada no tempo corrente ajuda a prever o quanto a inflação mudará do tempo corrente para daqui a alguns meses.
+
+Several of these authors say there is no consensus on which is the best core inflation since the core do not present all of the expected characteristics (usually the items (a) and (d)) and therefore recommend the use of a set of indicators with caution, knowing the capacity of each to extract information. These findings corroborate the reason central banks do not disclose only a single measure of core and also not lean on just a single tool for decision making.
+
+%Diversos desses autores citados afirmam não haver um consenso sobre qual é o melhor núcleo de inflação devido aos núcleos não apresentarem todas as características esperadas (geralmente as do item (a) e (d)) e, por isso, recomendam a utilização de um conjunto de indicadores com cautela, sabendo extrair a capacidade informativa de cada um. Essas conclusões corroboram o motivo dos bancos centrais não divulgarem apenas uma única medida de núcleo e também não se apoiarem em apenas uma ferramenta para tomada de decisões.\\
+
+To show the usefulness of this type of measure, this article aims to present a new core inflation that meets the criteria already presented, being useful to identify the current price trend. The measure is applied to the consumer price index (CPI) of the Getulio Vargas Foundation (FGV), but can be replicated in any existing consumer price index.
+
+%Vista a utilidade desse tipo de medida, esse artigo tem o objetivo de apresentar um novo núcleo que satisfaça os critérios já apresentados, sendo útil para identificar a tendência dos preços no momento atual. A medida é aplicada ao índice de preços ao consumidor (IPC) da Fundação Getúlio Vargas (FGV), mas pode ser replicada em qualquer índice de preços ao consumidor existente.\\ 
+
+To fulfill the objective of the article, it is organized as follows: in the next section is an analysis of the core measures disclosed in Brazil, mainly checking the five expected core criteria. Section \ref{metodologia} presents the proposed methodology, that is, how the Triple-Filter core inflation is calculated. Section \ref{resultados}, in addition to presenting the proposed measure, compares it with the conventional core measures especially in showing the ability of the Triple- Filter core to capture the trajectory of the headline inflation and provide information about the current state of the general level of prices. Finally, section \ref{consid} has the final considerations.
+
+%Para cumprir o objetivo do artigo, este está organizado da seguinte forma: na próxima seção é feita uma análise sobre as medidas de núcleo divulgadas no Brasil, verificando principalmente os quatro critérios esperados de um núcleo. Na seção \ref{metodologia} apresenta-se a metodologia proposta, isto é, como o núcleo com triplo filtro é calculado. Na seção \ref{resultados}, além de apresentar a medida proposta, a compara com as medidas de núcleo convencionais com destaque em mostrar a capacidade do núcleo triplo filtro em captar a trajetória da inflação e fornecer uma informação sobre o estado atual dos nível geral dos preços. Por fim, na seção \ref{consid} tem-se as considerações finais.\\
+
+
+
+% crítica aos núcleos divulgados no Brasil ----------------------------------
+\section{An analysis of the core measures disclosed in Brazil}\label{critica}
+
+Currently, there are six core inflation measures disclosed in Brazil. Five of them are estimated by the Central Bank of Brazil (BCB) and have reference to the IPCA\footnote{the Broad Consumer Price Index (IPCA) \citep{ipca}.}, the official rate of inflation in the country estimated by \cite{ibge1}. The other measure refers to the CPI\footnote{the Consumer Price Index (CPI) \citep{ipcibre}.}, estimated by \cite{ibre} of the Getulio Vargas Foundation (FGV). The measures\footnote{Official-EX1: Core for the IPCA that excludes monitored items and food at home; Official-EX2: Core for the IPCA which excludes the ten most volatile items; Official-DW: Core for the IPCA using double weighting method; Official-TM: Core for the IPCA using trimmed mean; Official-STM: Core for the IPCA using trimmed mean method with smoothed items; FGV-STM: Core for the CPI using trimmed mean method with smoothed items.} vary from Jan/1999 to Mar/2016 and are shown in Figure \ref{nucleos_brasil}. It is easy to see that all preserve a lot of noise in their history, with the trimmed mean core softer in the field but still suggesting indications of seasonality.
+
+
+% Atualmente, são divulgadas seis medidas de núcleo de inflação no Brasil. Cinco delas são estimadas pelo Banco Central do Brasil (BCB) e têm referência ao IPCA\footnote{Índice de Preços ao Consumidor Amplo (IPCA) \citep{ipca}.}, o índice oficial da inflação no país estimado pelo \cite{ibge1}. A outra medida refere-se ao IPC\footnote{Índice de Preços ao Consumidor (IPC) \citep{ipcibre}.}, estimado pelo \cite{ibre} da Fundação Getúlio Vargas. As medidas\footnote{IPCA-EX1: Núcleo por exclusão para o IPCA que exclui itens monitorados e alimentação no domicílio; IPCA-EX2: Núcleo por exclusão para o IPCA que exclui os 10 itens mais voláteis; IPCA-DP: Núcleo por dupla ponderação para o IPCA; IPCA-MA s/ suav.: Núcleo por médias aparadas sem suavização para o IPCA; IPCA-MA c/ suav.: Núcleo por médias aparadas com suavização para o IPCA; IPC-MA c/ suav.: Núcleo por médias aparadas com suavização para o IPC.} variam de jan/1999 a mar/2016 e são exibidas na figura \ref{nucleos_brasil}. É fácil notar que todas preservam bastante ruído em seu histórico, sendo os núcleos por médias aparadas os mais suaves dentre o conjunto, mas ainda sugerindo indicativos de sazonalidade.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{nucleos_brasil} % largura 13.11 altura 3.65
+  \caption{Core for the IPCA (IBGE) and the CPI (FGV/IBRE) - Jan/1999 to Mar/2016 (annual data)}
+  \label{nucleos_brasil}
+\end{figure}
+
+To understand and analyze the trajectory of inflation in Brazil, however, these cores should be less noisy and also without seasonality (seasonal test\footnote{X-13ARIMA-SEATS seasonality test \citep{x13}.}, available in Table \ref{qs_nucleos}, suggests, with 95\% confidence, the existence of a seasonal component in all core measures), as this component can mask the real trajectory of a time series. But despite this, these cores may still be suitable with regard to the characteristics desirable in view in section \ref{intro}. The assessment of such measures is made below.
+
+% Para entender e analisar a trajetória da inflação no Brasil, no entanto, estes núcleos deveriam ser menos ruidosos e também sem sazonalidade (teste de sazonalidade\footnote{Teste de sazonalidade do programa de ajuste sazonal X-13ARIMA-SEATS \citep{x13}.}, disponível na Tabela \ref{qs_nucleos}, sugere, com 95\% de confiança, a existência da componente sazonal em todas as medidas de núcleo), pois tal componente pode mascarar a real trajetória de uma série temporal. Mas, apesar disso, esses núcleos ainda podem ser adequados no que se refere às características desejáveis vistas na seção \ref{intro}. A avaliação dessa medidas é feita a seguir. 
+
+
+\begin{table}[h]
+\centering
+\caption{QS Seasonality Test}\label{qs_nucleos}
+\begin{threeparttable}
+\begin{tabular}{@{}l|cc@{}}
+\toprule
+\textbf{}        & \textbf{qs-stat} & \textbf{p-value} \\ \midrule
+Official-EX1     & 21.65            & 0.0000           \\
+Official-EX2     & 28.57            & 0.0000           \\
+Official-DW      & 10.12            & 0.0063           \\
+Official-TM      & 7.08             & 0.0290           \\
+Official-STM     & 12.27            & 0.0021           \\
+FGV-STM          & 28.11            & 0.0000           \\ \bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \scriptsize{$H_0$: There is no seasonality in time series.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Table \ref{descritiva_nucleos} displays descriptive statistics for the six core measures. All measurements have lower variability to the reference inflation index, highlighting the trimmed mean cores. It is noteworthy that all cores also have an average lower than the inflation rate, indicating they underestimate the long-term trend of price variation, and this average difference is more pronounced for the trimmed mean Official Brazilian CPI (Official-TM) and for the smoothed single core released by FGV (FGV-STM). This difference is mitigated when considering only the ten most recent years of information, however, it still represents a high bias around 1 percentage point for these two last mentioned cores. The Official-DW is the core that has a lower bias, however, one of the highest variability. The cores by exclusion are the ones in which the bias is not significant when assessing the most recent ten years. Except for this, all cores are classified as biased to the historical average of inflation.
+
+% A Tabela \ref{descritiva_nucleos} exibe estatísticas descritivas para as seis medidas de núcleo. Todas as medidas apresentam variabilidade inferior ao índice de inflação de referência, destacando-se os núcleos por médias aparadas. Vale ressaltar que todos os núcleos também possuem médias menores do que a do índice de inflação, indicando que subestimam a tendência de longo prazo da variação dos preços, e essa diferença de médias é mais acentuada para o núcleo por médias aparadas sem suavização do IPCA e para o único núcleo divulgado pela FGV, IPC-MA com suavização. Tal diferença é amenizada quando se considera apenas os dez anos mais recentes de informação, no entanto, ainda representa um viés alto em torno de 1 ponto percentual para esses dois últimos núcleos citados. O IPCA-DP é o núcleo que apresenta menor viés, no entanto, uma das variabilidades mais altas. Os núcleos por exclusão são os únicos em que o viés não é significativo quando se avaliam os dez anos mais recentes. Exceto isso, todos os núcleos são classificados como viesados para a média histórica da inflação.
+
+Table \ref{rmse_nucleos} presents the RMSE (Root Mean Square Error) between the core measures and the long-term trend of inflation, the latter obtained by the centered moving average for 36 months on the reference inflation index. Centered moving averages are often used to estimate the trend of a time series, however, it is important to pay attention to the fact that the most recent period, which is the most interesting to assess the inflation trajectory, cannot be rated due to the loss of the most recent information in the calculation. The cores that demonstrate the lowest RMSE, among the whole set of measures, are the two core inflations by trimmed mean with smoothed items: Official-STM and FGV-STM.
+
+%A Tabela \ref{rmse_nucleos} apresenta o RMSE (raiz do erro quadrático médio) entre as medidas de núcleo e a tendência de longo prazo da inflação, esta última obtida por média móvel centrada de 36 meses sobre o índice de inflação de referência. Médias móveis centradas são geralmente utilizadas para estimar uma medida de tendência de uma série temporal, no entanto, é importante atentar-se ao fato de que o período mais recente, que é o mais interessante para avaliar a trajetória da inflação, não é possível ser avaliado devido à perda das informações mais recentes no cálculo. Os núcleos que demonstram o menor RMSE, dentre todo o conjunto de medidas, são os dois núcleos por médias aparadas com suavização: IPCA-MA e IPC-MA.
+
+
+\begin{table}[h]
+\centering
+\caption{Descriptive statistics and evaluation of bias to the core inflations measures of Brazil}\label{descritiva_nucleos}
+\begin{threeparttable}
+\begin{tabular}{@{}l|ccccc@{}}
+\toprule
+\textbf{}                        & \textbf{Mean} & \textbf{Median}      & \textbf{Standard Deviation}   & \textbf{Bias}  & \textbf{p-value}\\ \midrule
+\textbf{Official inflation rate} & \textbf{7.02 (6.07)} & \textbf{6.29 (5.79)}  & \textbf{5.23 (3.55)}     & \textbf{-}     & \textbf{-}      \\ 
+Official-EX1                     & 6.15 (5.89)          & 5.54 (5.41)           & 3.28 (2.95)              & -0.86 (-0.18)  & 0.01 (0.19) \\
+Official-EX2                     & 6.65 (5.84)          & 6.17 (5.66)           & 3.53 (2.78)              & -0.37 (-0.23)  & 0.00 (0.23) \\
+Official-DW                      & 6.76 (6.01)          & 6.29 (5.91)           & 3.47 (2.19)              & -0.26 (-0.06)  & 0.00 (0.00) \\
+Official-TM                      & 5.71 (5.11)          & 5.28 (5.03)           & 2.98 (2.11)              & -1.31 (-0.96)  & 0.00 (0.00) \\
+Official-STM                     & 6.47 (5.77)          & 6.17 (5.54)           & 2.46 (1.78)              & -0.55 (-0.30)  & 0.00 (0.00) \\ \midrule
+\textbf{FGV inflation rate}      & \textbf{6.90 (6.11)} & \textbf{6.42 (5.98)} & \textbf{6.00 (4.75)}     & \textbf{-}      & \textbf{-}  \\ 
+FGV-STM                          & 5.66 (5.05)          & 5.28 (4.97)            & 2.81 (1.98)              & -1.24 (-1.07) & 0.00 (0.00) \\ \bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \scriptsize{Note: the statistics were obtained based on annualized measures. Figures in parenthesis are calculated considering the history of Apr/2006 to Mar/2016 (ten years), while others consider the historical series starting in Jan/1999. The p-value refers to the bias test (F test) of null hypothesis $H_0: \alpha = $ 0 and $\beta = 1$, where $\alpha$ and $\beta$ are linear regression coefficients between inflation and the core.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+%Nota: as estatísticas foram obtidas com base nas medidas anualizadas. Os valores entre parenteses são calculados considerando o histórico de abr/2006 a mar/2016 (dez anos), enquanto os outros consideram a série histórica com início em jan/1999. O p-valor é referente ao teste de viés (teste F) de hipótese nula $H_0: \alpha = 0$ e $\beta = 1$, em que $\alpha$ e $\beta$ são os coeficientes da regressão linear entre a inflação e o núcleo.
+
+\begin{table}[h]
+\centering
+\caption{RMSE between trend inflation and cores}\label{rmse_nucleos}
+\begin{threeparttable}
+\begin{tabular}{@{}l|cc@{}}
+\toprule
+           & \textbf{Official trend} & \textbf{FGV trend} \\ \midrule
+\textbf{Official inflation rate} & \textbf{4.85}   & -      \\ 
+Official-EX1 core       & 3.27   & -      \\
+Official-EX2 core       & 2.95   & -      \\ 
+Official-DW core        & 3.04   & -      \\
+Official-TM core        & 2.96   & -      \\
+Official-STM core       & 1.95   & -      \\ \midrule
+\textbf{FGV inflation rate}      & -      & \textbf{5,56}      \\
+FGV-STM core            & -      & 2.42      \\ \bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \scriptsize{Note: the statistics were obtained based on annualized measures.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+%\newpage
+
+In addition to the proximity of trends, it is also necessary to verify that the core has a long-term relationship with inflation, that is, it is expected that when the inflation trend increase (decreases), the core also increases (decreases). To verify this relationship you need to apply the following unit root and cointegration tests. The ADF unit root test (Table \ref{adf_nucleos}) applied to the entire series (Jan/1999 to Mar/2016) suggests that some measures are stationary, for example, Official inflation rate and CPI (FGV inflation rate). However, the same test applied only to the ten most recent years (values in parentheses in the same table), indicates that all measures are considered as a stochastic trend with a 95\% confidence level, indicating the lack of inflation stability in Brazil during this recent period. Based on the results for these two time horizons, it was considered that the series are not stationary. The ADF test was reapplied to all the differentiated measures and results, with 95\% confidence, indicating that they are stationary.
+
+
+% Além da proximidade entre tendências, também é preciso verificar se o núcleo tem relação de longo prazo com a inflação, isto é, espera-se que quando a tendência da inflação aumentar (diminuir), o núcleo também aumente (diminua). Para verificar essa relação, serão aplicados a seguir testes de raiz unitária e de cointegração. O teste ADF de raiz unitária (Tabela \ref{adf_nucleos}) aplicado em toda a série histórica (jan/1999 a mar/2016) sugere que algumas medidas podem ser consideradas estacionárias, como, por exemplo, o IPCA e o IPC. No entanto, o mesmo teste aplicado apenas aos dez anos mais recentes (valores entre parênteses na mesma tabela), indica que todas as medidas são consideradas com tendência estocástica com 95\% de confiança, indicando a falta de estabilidade da inflação no Brasil nesse período recente. Com base nos resultados para esses dois horizontes de tempo, considerou-se que as séries não são estacionárias. O teste ADF foi reaplicado a todas as medidas diferenciadas e os resultados, com 95\% de confiança, indicam que são estacionárias.
+
+\begin{table}[b]
+\centering
+\caption{Augmented Dickey \& Fuller Test}\label{adf_nucleos}
+\begin{threeparttable}
+\begin{tabular}{@{}l|cccc@{}}
+\toprule
+           & \textbf{$\tau$-stat} & \textbf{Critical Value} & \textbf{Lag} & \textbf{Conclusion} \\ \midrule
+Official inflation rate  & -3.929 (0.262)   & -2.88 (-1.95)                 & 07 (09)          & reject $H_0$     (do not reject $H_0$) \\
+Official-EX1             & -2.237 (-2.364)  & -2.88 (-2.88)                 & 11 (11)          & do not reject $H_0$ (do not reject $H_0$) \\
+Official-EX2             & -2.737 (-2.169)  & -2.88 (-2.88)                 & 13 (08)          & do not reject $H_0$ (do not reject $H_0$) \\
+Official-DW              & -3.486 (0.133)   & -2.88 (-1.95)                 & 07 (13)          & reject $H_0$     (do not reject $H_0$) \\
+Official-TM              & -3.126 (1.085)   & -2.88 (-1.95)                 & 07 (15)          & reject $H_0$     (do not reject $H_0$) \\
+Official-STM             & -2.149 (1.546)   & -2.88 (-1.95)                 & 12 (10)          & do not reject $H_0$ (do not reject $H_0$) \\ \midrule
+FGV inflation rate       & -3.096 (1.032)   & -2.88 (-1.95)                 & 12 (14)          & reject $H_0$     (do not reject $H_0$) \\
+FGV-STM                  & -2.290 (3.044)   & -2.88 (-1.95)                 & 12 (11)          & do not reject $H_0$ (do not reject $H_0$) \\ \bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \scriptsize{$H_0$: There is unit root (time series is not stationary). Figures in parenthesis are calculated considering the history of Apr/2006 to Mar/2016 (ten years), while others consider the historical series starting in Jan/1999.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Since all measurements are integrated of order 1, i.e., become stationary from the first differentiation, the Johansen cointegration test was applied between the cores and the reference inflation rate. The results (Table \ref{johansen_nucleos}) indicate that all cores have a long-term relationship with the inflation indices, but these results may differ depending on the lag considered in the test application.
+
+
+% Dado que todas as medidas são integradas de ordem 1, isto é, se tornam estacionárias a partir da primeira diferenciação, o teste de cointegração de Johansen foi aplicado entre os núcleos e o índice de inflação de referência. Os resultados (Tabela \ref{johansen_nucleos}) apontam que todos os núcleos apresentam relação de longo prazo com os índices de inflação, mas esses resultados podem divergir dependendo do \textit{lag} considerado na aplicação do teste.
+
+
+\begin{table}[]
+\centering
+\caption{Johansen Cointegration Test.}
+\label{johansen_nucleos}
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+\textbf{Eigenvalue}     & \textbf{\begin{tabular}[c]{@{}c@{}}Test\\ Statistic\end{tabular}} & \textbf{Critical Value} & \textbf{\begin{tabular}[c]{@{}c@{}}No. of cointegration\\ equations\end{tabular}} & \textbf{Conclusion} \\ \midrule
+\multicolumn{5}{c}{\textbf{Official inflation rate \& Official-EX1 core}}         \\ \midrule
+0.077 & 15.52  & 14.26 & None  & reject $H_0$  \\
+0.025 & 5.00   & 3.84  & At most 1  & reject $H_0$      \\ \midrule
+\multicolumn{5}{l}{\scriptsize{Two cointegrating equations at the 5\% level.}}\\ \\ \midrule
+
+\multicolumn{5}{c}{\textbf{Official inflation rate \& Official-EX2 core}}          \\ \midrule
+0.198 & 44.94 & 14.26 & None  & reject $H_0$      \\
+0.089 & 18.89  & 3.84  & At most 1 & reject $H_0$  \\ \midrule
+\multicolumn{5}{l}{\scriptsize{Two cointegrating equations at the 5\% level.}}\\ \\ \midrule
+
+\multicolumn{5}{c}{\textbf{Official inflation rate \& Official-DW core}}          \\ \midrule
+0.097 & 20.24 & 14.26 & None  & reject $H_0$      \\
+0.069 & 14.22  & 3.84  & At most 1 & reject $H_0$  \\ \midrule
+\multicolumn{5}{l}{\scriptsize{Two cointegrating equations at the 5\% level.}}\\ \\ \midrule
+
+\multicolumn{5}{c}{\textbf{Official inflation rate \& Official-TM core}}          \\ \midrule
+0.209 & 41.60 & 14.26 & None  & reject $H_0$      \\
+0.080 & 14.90  & 3.84  & At most 1 & reject $H_0$  \\ \midrule
+\multicolumn{5}{l}{\scriptsize{Two cointegrating equations at the 5\% level.}}\\ \\ \midrule
+
+\multicolumn{5}{c}{\textbf{Official inflation rate \& Official-STM core}}          \\ \midrule
+0.142 & 29.79 & 14.26 & None  & reject $H_0$      \\
+0.017 & 3.48  & 3.84  & At most 1 & do not reject $H_0$  \\ \midrule
+\multicolumn{5}{l}{\scriptsize{One cointegrating equation at the 5\% level.}}\\ \\ \midrule
+
+\multicolumn{5}{c}{\textbf{FGV inflation rate \& FGV-STM core}}          \\ \midrule
+0.237 & 54.09 & 14.26 & None  & reject $H_0$      \\
+0.031 & 6.27  & 3.84  & At most 1 & reject $H_0$  \\ \midrule
+\multicolumn{5}{l}{\scriptsize{Two cointegrating equations at the 5\% level.}}
+
+\end{tabular}
+\end{table}
+
+%\newpage
+
+As there is supposedly a long-term relationship for all measures, the adjustment dynamics can be assessed. The evaluation is made in the analysis of the coefficients $\lambda$ and $\lambda_c$ of the equations (\ref{equacao_mehra1}) and (\ref{equacao_mehra2}) \citep{mehra}, indicating how the  inflation and the core adjust when there is some difference between them. It is expected that $\lambda$ is negative and $\lambda_ {c}$ is zero, so we can conclude that inflation moves towards the core and the core does not move toward inflation.
+
+
+% Como há, supostamente, relação de longo prazo para todas as medidas, a dinâmica de ajustamento pode ser avaliada. A avaliação se dá na análise dos coeficientes $\lambda$ e $\lambda_c$ das equações (\ref{equacao_mehra1}) e (\ref{equacao_mehra2}) \citep{mehra}, que indicam como a inflação e o núcleo se ajustam quando há alguma diferença entre eles. O esperado é que $\lambda$ seja negativo e $\lambda_{c}$ seja nulo, assim pode-se concluir que a inflação se move em direção ao núcleo e o núcleo não se move em direção à inflação.
+
+\begin{equation}
+\label{equacao_mehra1}
+\Delta\pi_t = \alpha + \lambda\mu_{t-1} + \sum_{k=1}^{p}\alpha_k\Delta\pi_{t-k} + \varepsilon_t 
+\end{equation}
+
+\begin{equation}
+\label{equacao_mehra2}
+\Delta\pi_t^{c} = \alpha + \lambda_{c}\mu_{t-1} + \sum_{k=1}^{p}\alpha_k\Delta\pi_{t-k}^{c} + \varepsilon_t
+\end{equation}
+\noindent
+where:\\
+$\pi_t$ is the inflation rate (annualized monthly percent change);\\
+$\pi_t^{c}$ is the core inflation (annualized monthly percent change);\\
+$\mu_{t-1}$ is the cointegration vector, which comes down to $\pi_t - \pi_t^{c}$ if the core is unbiased;\\
+$\Delta = 1-L$ in which L is the lag operator such that $L^ny_t = y_{t-n}$.\\
+
+The results shown in Table \ref{dinamica_nucleos} suggest that the adjustment dynamic is given appropriately only for the FGV-STM core, that is, it can be concluded that only inflation moves towards the core and not the other way ($\lambda$ significant and negative and $\lambda_c$ not significant). However, the same analysis for the ten most recent years (figures in brackets in Table \ref{dinamica_nucleos}) does not suggest the expected dynamic for any of the measures. In some cases, for example Official-EX1 and Official-TM cores, the dynamic occurs in two possible ways: the core moves toward inflation ($\lambda_c$ significant) and inflation moves towards the core ($\lambda$ significant and negative).
+
+% Os resultados expostos na Tabela \ref{dinamica_nucleos} sugerem que a dinâmica de ajustamento se dá de forma adequada apenas para o núcleo IPC-MA com suavização (FGV), isto é, é possível concluir que somente a inflação se move em direção ao núcleo e não o contrário ($\lambda$ significativo e negativo e $\lambda_c$ não significativo. No entanto, a mesma análise feita para os dez anos mais recentes (valores entre parenteses na Tabela \ref{dinamica_nucleos}) não sugere a dinâmica esperada para nenhuma das medidas. Em alguns casos, por exemplo IPCA-EX1 e IPCA-MA sem suavização, a dinâmica se dá de duas formas possíveis: o núcleo se move em direção à inflação ($\lambda_c$ significativo) e a inflação se move em direção ao núcleo ($\lambda$ significativo e negativo).
+
+
+\begin{table}[h]
+\centering
+\caption{Dynamic between inflation and core inflation - Jan/1999 to Mar/2016}
+\label{dinamica_nucleos}
+\begin{threeparttable}
+%\begin{tabular}{lcccc}
+\begin{tabular}{@{}l|cc|cc@{}}
+\toprule
+             & \textbf{$\lambda$}     & \textbf{$\bar{R}^2$} & \textbf{$\lambda_c$}   & \textbf{$\bar{R}^2$} \\ \midrule
+Official-EX1 & -0.2943*** (-0.2337*)  & 0.2034 (0.1237)      & 0.2423*** (0.2039***)  & 0.4610 (0.5633) \\
+Official-EX2 & -0.2305*   (0.1642)    & 0.1747 (0.2262)      & 0.3279*** (0.3099**)   & 0.2772 (0.3173) \\
+Official-DW  & -0.3692*   (0.0615)    & 0.1816 (0.2196)      & 0.2450**  (0.2303*)    & 0.1627 (0.2843) \\
+Official-TM  & -0.3256*   (-0.3746**) & 0.1082 (0.1341)      & 0.2936*** (0.1894*)    & 0.1951 (0.1561) \\
+Official-STM & -0.3523*** (0.0834)    & 0.1747 (0.2204)      & 0.1571*** (0.1445**)   & 0.2264 (0.3087) \\ 
+FGV-STM      & -0.6172*** (-0.1477)   & 0.3124 (0.5007)      & -0.0037   (0.0663)     & 0.0942 (0.2609) \\ \bottomrule
+\end{tabular}\begin{tablenotes}
+\item \scriptsize{Note: significance levels: 5\% (*), 1\% (**) e 0.1\% (***).}
+\item \scriptsize{The statistics were obtained based on annualized measures. Figures in parenthesis are calculated considering the history of Apr/2006 to Mar/2016 (ten years), while others consider the historical series starting in Jan/1999.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+In order to verify that the difference between the core and the inflation in the current time ($t$) helps predict inflation in 1 and 2 years ($t+12$ and $t+24$), it was estimated using the equation (\ref{equacao_prev}).
+
+% A fim de verificar se a diferença entre o núcleo e a inflação no tempo corrente (tempo $t$) ajuda a prever a inflação daqui a 1 e 2 anos ($t+12$ e $t+24$), estimou-se a equação \ref{equacao_prev}. 
+
+\begin{equation}
+\label{equacao_prev}
+\pi_{t+h} - \pi_{t} = \alpha + \beta (\pi_{t}^{c} - \pi_{t} ) + \varepsilon_t 
+\end{equation}
+\noindent
+where:\\
+$\pi_t$ is the inflation rate (annualized monthly percent change);\\
+$\pi_t^{c}$ is the core inflation (annualized monthly percent change).\\
+
+
+By observing the results in Table \ref{infla_prev}, we note that, for the two forecast horizons ($h=12,24$), the trimmed mean cores inflation have a greater predictive capacity when considering the complete historical series than the most recent 10 years. However, this prediction capacity drops considerably for the most recent period, which leads one to question the usefulness of the core today. Considering the complete historical series, for a year ahead forecast  ($h=12$), the Official trimmed mean with and without smoothing stands at (adjusted $R^2$ equals 35\%) while for two years ahead ($h=24$) the Official-TM takes on $\bar{R}^2$ equals 42\%. For the past 10 years, the FGV-STM core has the highest predictive ability for a year ahead forecast (adjusted $R^2$ equals 16\%) and Official-TM core is the most appropriate for two years ahead (adjusted $R^2$ equals 25\%). Although the values are relatively low, by the simplicity of the model, such values are acceptable and are also useful to compare the performance of the cores between them.
+
+% Ao observar os resultados da Tabela \ref{infla_prev}, nota-se que, para os dois horizontes de previsão ($h=12,24$), os núcleos por médias aparadas apresentam maior capacidade preditiva tanto considerando a série histórica completa quanto os 10 anos mais recentes. No entanto, essa capacidade de previsão cai consideravelmente para o período mais recente, o que leva a questionar a utilidade do núcleo atualmente. Considerando a série histórica completa, para um ano de previsão à frente ($h=12$), o IPCA-MA com e sem suavização do Banco Central se destacam ($R^2$ ajustado de  35\%), enquanto que para dois anos à frente ($h=24$), o IPCA-MA sem suavização assume $\bar{R}^2$ de 42\%. Para os últimos 10 anos, o núcleo IPC-MA da FGV tem a maior capacidade preditiva para um ano à frente de previsão ($R^2$ ajustado de  16\%) e o IPCA-MA sem suavização é o mais indicado para dois anos à frente ($R^2$ ajustado de 25\%). Embora os valores sejam relativamente baixos, pela simplicidade do modelo, tais valores são aceitáveis e também são úteis para comparar o desempenho dos núcleos entre si.
+
+\begin{table}[h]
+\centering
+\caption{Forecasting inflation rate using core inflation}\label{infla_prev}
+\begin{threeparttable}
+\begin{tabular}{@{}cl|ccc|ccc@{}}
+\toprule
+\multicolumn{1}{l}{}               &  & \multicolumn{3}{c|}{Jan/1999 to Mar/2016} & \multicolumn{3}{c}{Apr/2006 to Mar/2016} \\ \midrule
+                                   & \textbf{}                         & \textbf{$\bar{R}^2$} & \textbf{$\beta$} & \textbf{t-stat}   & \textbf{$\bar{R}^2$} & \textbf{$\beta$} & \textbf{t-stat} \\ \midrule
+
+\multirow{6}{*}{\textbf{$h = 12$}} & \multicolumn{1}{l|}{Official-EX1} & 0.29                 & 0.888 (0.1001)   & 8.871***          & 0.07                 & 0.406 (0.1293)   & 3.141***        \\
+                                   & \multicolumn{1}{l|}{Official-EX2} & 0.28                 & 1.172 (0.1341)   & 8.744***          & 0.04                 & 0.389 (0.1646)   & 2.365*        \\
+                                   & \multicolumn{1}{l|}{Official-DW}  & 0.21                 & 1.238 (0.1690)   & 7.343***          & 0.09                 & 0.634 (0.1698)   & 3.737***        \\
+                                   & \multicolumn{1}{l|}{Official-TM}  & 0.35                 & 1.467 (0.1521)   & 9.641***          & 0.13                 & 0.656 (0.1524)   & 4.302***        \\
+                                   & \multicolumn{1}{l|}{Official-STM} & 0.35                 & 1.008 (0.0971)   & 10.380***         & 0.13                 & 0.516 (0.1164)   & 4.433***       \\
+                                   & \multicolumn{1}{l|}{FGV-STM}      & 0.30                 & 0.910 (0.0989)   & 9.207***          & 0.16                 & 0.469 (0.0969)   & 4.842***        \\ \midrule
+\multirow{6}{*}{\textbf{$h = 24$}} & \multicolumn{1}{l|}{Official-EX1} & 0.22                 & 0.814 (0.1108)   & 7.345***          & 0.11                 & 0.663 (0.1697)   & 3.910***        \\
+                                   & \multicolumn{1}{l|}{Official-EX2} & 0.21                 & 1.029 (0.1471)   & 6.999***          & 0.11                 & 0.759 (0.1932)   & 3.932***        \\
+                                   & \multicolumn{1}{l|}{Official-DW}  & 0.19                 & 1.244 (0.1859)   & 6.212***          & 0.14                 & 1.100 (0.2409)   & 4.567***        \\
+                                   & \multicolumn{1}{l|}{Official-TM}  & 0.42                 & 1.503 (0.1387)   & 10.836***         & 0.25                 & 1.272 (0.1970)   & 6.460***       \\
+                                   & \multicolumn{1}{l|}{Official-STM} & 0.29                 & 0.935 (0.1081)   & 8.645***          & 0.19                 & 0.817 (0.1496)   & 5.458***        \\
+                                   & \multicolumn{1}{l|}{FGV-STM}      & 0.27                 & 0.925 (0.1113)   & 8.307***          & 0.20                 & 0.678 (0.1225)   & 5.532***        \\ \bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \scriptsize{Note: $\beta$ standard deviation in parenthesis; t-stat is the test statistic of $\beta$ parameter.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+With the results presented, we conclude that no core inflation measure has optimum performance when considering all the analyzed criteria. All core inflations underestimate the inflation trend, and this is the most expressive feature in the cores inflation by trimmed mean, however these are less noisy than the Official-EX1, Official-EX2 and Official-DW cores inflation, which underestimate less. All the measures also have a long-term relationship with inflation, but this relationship does not occur properly for any of them, except for the FGV-STM. However, this ratio can also be questioned because the ability to attract inflation is considered a failure for the most recent period of data. The forecast capacity is most relevant for the trimmed mean cores inflation, although it can be questionable in the most recent period.
+
+% Com os resultados apresentados, é possível concluir que nenhuma medida de núcleo têm desempenho ótimo ao considerar todos os critérios analisados. Todos os núcleos subestimam a tendência da inflação, sendo essa característica mais expressiva nos núcleos por médias aparadas, no entanto estes são menos ruidosos do que os núcleos IPCA-EX1, IPCA-EX2 e IPCA-DP, que subestimam menos. Todos as medidas também têm relação de longo prazo com a inflação, mas essa relação não se dá de modo adequado para nenhuma delas, exceto para o núcleo IPC-MA com suavização da FGV. No entanto, essa relação também pode ser questionada pois a capacidade de atrair a inflação é considerada falha para o período mais recente dos dados. A capacidade de previsão é mais relevante para os núcleos por médias aparadas, embora seja questionável no período mais recente.
+
+
+In view of this, it is worth the effort to find another measure of core inflation that satisfies the criteria used in this study.
+
+% Em vista disso, é válido o esforço em encontrar outra medida de núcleo que satisfaça os critérios seguidos nesse estudo.
+
+% medida de tendencia proposta ----------------------------------
+\section{Trend Measure: Triple-Filter Core inflation}\label{metodologia}
+
+Viewing the analysis in section \ref{critica}, we notice the poor performance of the currently disclosed core inflations in Brazil, and the trimmed mean with smoothed items are the ones that stand out when considering bias, forecast, adjustment dynamics and proximity of the aggregated inflation. Similar conclusions can be found in other studies of the core measures in Brazil \citep{tito2011,castelar2013,tito2014}. Because of this, three procedures are suggested in order to improve the performance of a core by smoothing trimmed mean and find a trend measure for inflation:
+
+% Vista a análise feita na seção \ref{critica}, percebe-se o baixo desempenho dos núcleos divulgados atualmente no Brasil, sendo que os núcleos por médias aparadas com suavização são os que mais se destacam quando se considera viés, previsão, dinâmica de ajustamento e proximidade da inflação agregada. Conclusões similares podem ser encontradas em outros estudos feitos sobre as medidas de núcleo no Brasil \citep{tito2011,castelar2013,tito2014}. Em razão disso, são sugeridos três procedimentos com o intuito de aprimorar o desempenho de um núcleo por médias aparadas com suavização e de encontrar medida de tendência para a inflação:
+
+\begin{enumerate}
+ \setlength\itemsep{0.1em}
+\item Recalculate the trimmed mean with smoothed items core inflation changing the number of items that will be removed in the lower and upper tails;
+% Recalcular o núcleo de médias aparadas com suavização alterando a proporção de itens que serão removidos nos extremos inferior e superior;
+\item  Remove the identified seasonality;
+\item Apply a short filter of moving averages to remove the high frequency component remaining after seasonal adjustment.
+\end{enumerate}
+
+The smoothing trimmed mean core inflation excludes from the price index the items with the highest and lowest variations in the period. So, every month it is decided whether an item remains or is excluded from the index calculation. By using smoothing, it allows that some items have a chance to not be summarily excluded. For example, administered items that have less frequent adjustments, but at significant times. Smoothing divides the variation of these predefined items in 12 and also distributes in a 12-month horizon.  The smoothed items account for about 37\% of the FGV inflation basket\footnote{The items that are smoothed in the trimmed mean methodology are:Residential Rental, Residential Housing,  Residential Electricity Tarifs, Gas Bottles, Piped Gas Rate, Residential Water and Sewerage Rates, Dentist, Doctor, Psychologist, Health Insurance, Other Health Professionals, Gastroprotective, Psychotropic and Anorectic, Analgesic and Antipyretic, Anti-inflammatory and Antibiotic, Flu and Antitussive, Antiallergic and Bronchodilator, Vasodilator For Blood Pressure, Calming And Antidepressant, Contraceptive, Dermatological, Vitamin E Fortifying, Antimycotic and Parasiticide, Medicine For Diabetes, Medicine for Osteoporosis, Optician Medicines, Elementary Education, Secondary Education, Early Childhood Education (Pre-school), Higher Education, Early Childhood Education (Daycare)  Post-Graduate Course, Boat  And Hovercraft fares, Metro Fare, Bus Fare, Urban Taxi Fare, School Transportation, Urban Train Fare, Transport Rate for Van And Similar,  Interurban Bus Fare, Ethanol, Gasoline, Lubricating Oil, Diesel Oil, Natural Gas, Property taxes, Tolls, Compulsory Vehicle Insurance, Phone Card, Postal Rate, Internet Access, Lottery Tickets, Lottery in general, Residential Phone Rates, Mobile Phone Rates.}.
+
+%O núcleo por médias aparadas exclui do índice de preços os itens que apresentaram as maiores e menores variações no período. Assim, a cada mês é decidido se um item permanece ou é excluído do cálculo do índice. Ao utilizar suavização, permite-se que alguns itens tenham uma chance de não serem excluídos sumariamente. Por exemplo os itens administrados que possuem reajustes menos frequentes, mas às vezes expressivos. A suavização reparte a variação desses itens pré-definidos\footnote{Os itens que são suavizados na metodologia de médias aparadas com suavização são: Aluguel Residencial, Condomínio Residencial, Tarifa De Eletricidade Residencial, Gás De Bujão, Tarifa De Gás Encanado, Taxa De Água E Esgoto Residencial, Dentista, Médico, Psicólogo, Plano E Seguro De Saúde, Outros Profissionais De Saúde, Gastroprotetor, Psicotrópico E Anorexígeno, Analgésico E Antitérmico, Antiinflamatório E Antibiótico, Antigripal E Antitussígeno, Antialérgico E Broncodilatador, Vasodilatador Para Pressão Arterial, Calmante E Antidepressivo, Anticoncepcional, Dermatológico, Vitamina E Fortificante, Antimicótico E Parasiticida, Remédio Para Diabete, Remédio Para Osteoporose, Remédios Oftamológicos, Curso De Ensino Fundamental, Curso De Ensino Médio, Curso De Educação Infantil (Pré-Escolar), Curso  De Ensino Superior, Curso De Educação Infantil (Creche), Curso De Pós-Graduação, Tarifa De  Barco E Aerobarco, Tarifa De  Metrô, Tarifa De Ônibus Urbano, Tarifa De Táxi, Transporte Escolar, Tarifa De Trem Urbano, Tarifa De Transporte De Van E Similares, Tarifa De Ônibus Interurbano, Etanol, Gasolina, Óleo Lubrificante, Óleo Diesel, Gás Natural Veicular, Licenciamento - Ipva, Pedágio, Seguro Obrigatório Para Veículo, Cartão De Telefone, Tarifa Postal, Acesso À Internet Em Loja, Bilhete Lotérico, Jogo Lotérico, Tarifa De Telefone Residencial, Tarifa De Telefone Móvel.} em 12 e a distribui igualmente em um horizonte de 12 meses. Esses itens correspondem a aproximadamente 37\% do cesta do IPC-FGV.
+
+Changing the number of items that will be removed from the core calculation is intended to approximate the average of the core inflation to the average of the headline inflation, eliminating the average bias. Removal of the seasonal component is important to avoid misinterpretation regarding the time series trend. To deseasonalize the series, the seasonal adjustment program X-13ARIMA-SEATS \citep{x13} was used. However, even with seasonal adjustment, a time series may still be considered volatile, precisely because the purpose of seasonal adjustment is only to remove the seasonal component and not the high frequency component (irregular/noise). Economic analysts generally use smoothing techniques to try to capture the supposed tendency of a volatile time series, such as, for example, moving averages. If there is seasonality in the time series, usually the order 12 is used (variation accumulated in 12 months) or higher to analyze the trajectory of inflation (as is done in Brazil). The downside here is that the current inflation is very affected by past values. In this article, however, after removal of seasonality, one can employ a moving average of short order (three months) for the purpose of removing only high-frequency variations. Thus, current  inflation is little influenced by the past  (equation (\ref{equacao_mm3})). After these three filters (extreme variations, seasonality, noise), there is the (annualized) Triple-Filter core inflation (TF core inflation).
+
+%A alteração da proporção de itens que serão removidos do cálculo do núcleo tem o intuito de aproximar a média do núcleo à média da inflação, eliminando o viés de média. A remoção da componente sazonal é importante para evitar interpretações inadequadas a respeito da tendência da série temporal. Para dessazonalizar a série, fez-se uso do programa de ajuste sazonal X-13ARIMA-SEATS \citep{x13}. Todavia, mesmo com ajuste sazonal, uma série temporal ainda pode ser considerada volátil, justamente porque o objetivo do ajuste sazonal é apenas remover a componente sazonal e não a componente de alta frequência (irregular/ruído). Analistas econômicos geralmente utilizam técnicas de suavização para tentar captar a suposta tendência de uma série temporal volátil como, por exemplo, médias móveis. Caso haja sazonalidade na série temporal, geralmente utiliza-se a ordem 12 (variação acumulada em 12 meses) ou superior para analisar a trajetória da inflação (como é feito no Brasil). O ponto negativo nesse caso é que a inflação corrente é muito afetada por valores passados. Nesse artigo, no entanto, após a remoção da sazonalidade, pode-se empregar uma média móvel de ordem curta (três meses) com a finalidade de remover apenas as variações de alta frequência. Assim, a inflação no tempo atual é pouco influenciada pelo passado (equação \ref{equacao_mm3}). Após esses três filtros (variações extremas, sazonalidade, resíduos), tem-se o Núcleo Triplo Filtro (anualizado).
+
+\begin{equation}\label{equacao_mm3}
+\pi_{i,t}^{TF} = \left [\left (\prod_{i=0}^{2} \frac{\pi_{i,t-i}^{AJ}}{100} + 1  \right )^{\frac{12}{3}} -1 \right ] \times 100.
+\end{equation}
+
+\noindent
+Where:\\
+$\pi_{i,t}^{AJ}$ is the core inflation seasonally adjusted (monthly percent change);\\
+$\pi_{i,t}^{TF}$ is the annualized Triple-Filter core.\vspace{0.3cm}
+
+The methodology presented will be applied only to the FGV inflation rate (CPI) but can be easily replicated for any consumer price index. The first filtering methodology excludes items with extreme variations that accumulate 20\% of the lower tail and 13\% of the upper tail, leaving 67\% of the original weight of the basket of products. The estimation made by FGV/IBRE considers 20\% for the two tails. The  seasonally adjusted specifications (second filter) were set considering the complete historical series from January 1999 to March 2016. Two outliers were detected (Feb/1999 and Nov/2002), which were kept to perfect the quality of seasonal adjustment. The SARIMA(0 1 1)(1 0 0)$_{12}$ model was fitted was not applied to the processing of the data.
+
+% A metodologia apresentada será aplicada apenas para o IPC (FGV/IBRE) mas pode ser facilmente replicada para qualquer índice de preços ao consumidor. A primeira filtragem da metodologia exclui os itens com variações extremas que acumulam 20\% da cauda inferior e 13\% da cauda superior, restando então 67\% do peso original da cesta de produtos. A estimação feita pela FGV/IBRE considera 20\% para as duas caudas. As especificações do ajuste sazonal (segundo filtro) foram definidas considerando a série histórica completa de jan/1999 a mar/2016. Foram detectados dois outliers (fev/1999 e nov/2002), que foram mantidos por aperfeiçoarem a qualidade do ajuste sazonal. O modelo SARIMA é da ordem (1 0 0)(1 0 0)$_{12}$ e não foi aplicada nenhuma transformação aos dados.
+
+\section{Results}\label{resultados}
+
+The TF core inflation, shown in Figure \ref{ipc_nucleo}, is the estimated trend measure for the CPI (FGV/IBRE) following the procedures seen in the section \ref{metodologia}. Clearly, the measure is less volatile than the price index and note that its trajectory is increasing from 2010, whereupon the indicator floats around the inflation target ceiling (6.5\%) stipulated by the Central Bank, reaching beyond it significantly from 2014. The latest available data (2016) point to a possible stabilization and even decrease of the price trend.
+
+% O Núcleo TF, apresentado na Figura \ref{ipc_nucleo}, é a medida de tendência estimada para o IPC (FGV/IBRE) seguindo os procedimentos vistos na seção \ref{metodologia}. Claramente, a medida é menos volátil do que o índice de preços e nota-se que sua trajetória é crescente a partir de 2010 em que o indicador flutua em torno do teto da meta da inflação (6,5\%) estipulada pelo BC, chegando a ultrapassá-la expressivamente a partir de 2014. Os últimos dados disponíveis (ano de 2016) apontam para uma possível estabilização e até decrescimento da tendência dos preços.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{ipc_triplo_filtro}
+  \caption{TF core inflation of CPI (FGV/IBRE) - Mar/1999 a Mar/2016 (annual data)}
+  \label{ipc_nucleo}
+\end{figure}
+
+Furthermore, the analysis of the TF core inflation (Table \ref{descritiva_ipc_nucleos}) allows us to conclude that the measure is not biased (p-value = 0.58), that is, the core inflation does not underestimate or overestimate the inflation trend. The conclusion is also valid when analyzing the ten most recent years (p = 0.29). These first positive results were achieved after the new definition of the number of items with extreme variations that should be excluded in calculating the trimmed mean methodology.
+
+% Além disso, as análises feitas sobre o Núcleo TF (Tabela \ref{descritiva_ipc_nucleos}) permitem concluir que a medida é não viesada (p-valor = 0,58), ou seja, o núcleo não subestima ou superestima a tendência da inflação. A conclusão também é válida quando se analisa os dez anos mais recentes (p-valor = 0,29). Esses primeiros resultados positivos foram alcançados após a nova definição da proporção de itens com variações extremas que deveriam ser excluídos no cálculo da metodologia de médias aparadas.
+
+When measuring the distance between the TF core inflation and the price trend obtained by the moving averages (Table \ref{rmse_ipc_nucleos}), this distance can be considered small compared to the core inflation now published by FGV/IBRE (FGV-STM), concluding that, on average, the TF core inflation follows the inflation  trend closer than the current FGV core inflation.
+
+% Quando se mensura a distância entre o Núcleo TF e a tendência dos preços obtida por médias móveis (Tabela \ref{rmse_ipc_nucleos}), tal distância pode ser considerada pequena em comparação ao núcleo divulgado atualmente pela FGV/IBRE, concluindo que, em média, o Núcleo TF caminha mais próximo da tendência da inflação do que o núcleo atual da FGV. 
+
+
+
+
+\begin{table}[]
+\centering
+\caption{Descriptive statistics and evaluation of bias to the Triple-Filter core inflation}\label{descritiva_ipc_nucleos}
+\begin{threeparttable}
+\begin{tabular}{@{}l|ccccc@{}}
+\toprule
+\textbf{}                       & \textbf{Mean}         & \textbf{Median}      & \textbf{Standard Deviation} & \textbf{Bias}  & \textbf{p-value}\\ \midrule
+\textbf{FGV inflation rate}     & \textbf{6.90 (6.11)}  & \textbf{6.42 (5.98)} & \textbf{6.00 (4.75)}        & \textbf{-}     & \textbf{-}  \\ 
+TF core inflation               & 6.86 (6.16)           & 6.59 (6.04)          & 2.21 (1.47)                 & -0.04 (0.05)   & 0.58 (0.29) \\ \bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \scriptsize{Note: the statistics were obtained based on annualized measures. Figures in parenthesis are calculated considering the history from Apr/2006 to Mar/2016 (ten years), while the others consider the historical series starting in March 1999. The p-value refers to the null hypothesis bias test $H_0: \alpha = $ 0 and $\beta = 1$. There are no indications that the core inflation is biased towards the two time cuts.}
+
+%the statistics were obtained based on annualized measures. Figures in parenthesis are calculated considering the history of Apr/2006 to Mar/2016 (ten years), while others consider the historical series starting in Jan/1999. The p-value refers to the bias test (F test) of null hypothesis $H_0: \alpha = $ 0 and $\beta = 1$, where $\alpha$ and $\beta$ are linear regression coefficients between inflation and the core. There are no indications that the core is biased.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+\vspace{0.3cm}
+
+\begin{table}[]
+\centering
+\caption{RMSE between FGV trend inflation and Triple-Filter core}\label{rmse_ipc_nucleos}
+\begin{threeparttable}
+\begin{tabular}{p{3cm}|c}
+\toprule
+                   & \textbf{FGV trend} \\ \midrule
+FGV-STM            & 2,42      \\
+TF core inflation  & 1,41      \\  \bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{table}
+
+\vspace{0.3cm}
+
+%\vspace{0.7cm}
+
+It is also possible to conclude that the TF core inflation and the inflation trend have a long-term relationship because, with 95\% confidence, the two time series are  first order integrated (Table \ref{adf_ipc_nucleos}) and cointegrated (Table \ref{johansen_ipc_nucleos}). The dynamics of this long-term relationship between the TF core inflation and the CPI is given as expected (see Table \ref{dinamica_ipc_nucleos}). Since $\lambda$ is negative and significant, when inflation is above or below the core inflation, it will tend to move towards the core inflation. There is no evidence of the opposite movement (core toward inflation), since $\lambda_c$  is not significant. This dynamic is maintained when evaluating the ten most recent years of data. These results together demonstrate that the TF core inflation captures the inflation trend properly.
+
+% Também é possível concluir que o Núcleo TF e a tendência da inflação possuem relação de longo prazo, pois, com 95\% de confiança, as duas séries temporais são integradas de primeira ordem (Tabela \ref{adf_ipc_nucleos}) e cointegradas (Tabela \ref{johansen_ipc_nucleos}). A dinâmica dessa relação de longo prazo entre o Núcleo TF e o IPC se dá da forma esperada (vide Tabela \ref{dinamica_ipc_nucleos}). Por $\lambda$ ser negativo e significativo, quando a inflação estiver acima ou abaixo do núcleo, ela tenderá a se mover em direção ao núcleo. Não há evidências sobre o movimento contrário (núcleo em direção à inflação), uma vez que $\lambda_c$ é não significativo. Essa dinâmica se mantém quando se avaliam os dez anos mais recentes de dados. Esses resultados em conjunto permitem concluir que o Núcleo TF captura a tendência da inflação adequadamente. 
+
+%\newpage
+
+Table \ref{infla_prev_toda_ipc} presents the estimation results of the equation (\ref{equacao_prev}) to see if the difference between the core inflation and the inflation in the current time (time $t$) helps to predict how inflation will change in a year or two. It can be favorably concluded using the core inflation, since the coefficient $\beta$  is significant for the two time horizons.
+
+% A Tabela \ref{infla_prev_toda_ipc} apresenta os resultados da estimação da equação (\ref{equacao_prev}) para verificar se a diferença entre o núcleo e a inflação no tempo corrente (tempo $t$) ajuda a prever o quanto a inflação mudará daqui a um ano ou dois. Pode-se concluir favoravelmente à utilização do núcleo, uma vez que o coeficiente $\beta$ é significativo para os dois horizontes de tempo. 
+
+The statistics $\bar{R}^2$, although considerably lower, still show that the core inflation is an important factor in the prediction of inflation. When comparing TF core inflation performance with the current FGV Core Inflation (FGV-STM) only in regard to this forecast, there are no arguments in favor of using one or the other, since the predictive ability of the two core inflations are similar.
+
+% Os $\bar{R}^2$ dos modelos, apesar de serem consideravelmente baixos, ainda assim mostram que o núcleo é uma informação relevante na previsão da inflação. Ao comparar o desempenho do núcleo TF com o núcleo atual da FGV somente nesse quesito de previsão, não há argumentos à favor da utilização de um ou de outro, uma vez que a capacidade preditiva dos dois núcleos são similares. 
+
+\vspace{0.3cm}
+
+\begin{table}[]
+\centering
+\caption{Augmented Dickey \& Fuller Test}\label{adf_ipc_nucleos}
+\begin{threeparttable}
+\begin{tabular}{@{}l|cccc@{}}
+\toprule
+                     & \textbf{$\tau$-stat} & \textbf{Critical Value} & \textbf{Lag} & \textbf{Conclusion} \\ \midrule
+FGV inflation rate          & -3.096               & -2.88                & 12           & reject $H_0$  \\
+FGV inflation rate (recent) & 1.032                & -1.95                & 14           & do not reject $H_0$  \\
+TF core inflation           & -1.982               & -2.88                & 16           & do not reject $H_0$  \\
+TF core inflation (recent)  & 1.852                & -1.95                & 18           & do not reject $H_0$  \\ \bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \scriptsize{$H_0$: There is unit root (time series is not stationary).}
+\item \scriptsize{ADF test is applied considering the history of Mar/1999 to Mar/2016 and the ten most recent years of data.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+%\newpage
+
+\begin{table}[h]
+\centering
+\caption{Johansen Cointegration Test between IPC and Triple-Filter core}
+\label{johansen_ipc_nucleos}
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+\textbf{Eigenvalue}     & \textbf{\begin{tabular}[c]{@{}c@{}}Test\\ Statistic\end{tabular}} & \textbf{Critical Value} & \textbf{\begin{tabular}[c]{@{}c@{}}No. of cointegration\\ equations\end{tabular}} & \textbf{Conclusion} \\ \midrule
+0,115 & 23,41 & 14,26 & None  & reject $H_0$      \\
+0,007 & 1,43  & 3,84  & At most 1 & do not reject $H_0$  \\ \midrule
+\multicolumn{5}{l}{\scriptsize{One cointegrating equation at the 5\% level.}}%\\ \\ \midrule
+\end{tabular}
+\end{table}
+
+%\vspace{0.3cm}
+
+\begin{table}[h]
+\centering
+\caption{Dynamic between CPI and Triple-Filter core inflation}
+\label{dinamica_ipc_nucleos}
+\begin{threeparttable}
+\begin{tabular}{@{}l|cccc@{}}
+\toprule
+                            & \textbf{$\lambda$} & \textbf{$\bar{R}^2$} & \textbf{$\lambda_c$} & \textbf{$\bar{R}^2$} \\ \midrule
+TF core inflation           & -1.925***          & 0.4372               & -0.0021              & 0.5885 \\ 
+TF core inflation (recent)  & -0.515***          & 0.5392               & 0.005                & 0.2851 \\ \bottomrule
+
+\end{tabular}
+\begin{tablenotes}
+\item \scriptsize{Note: significance levels: 0.1\% (***)}
+\item \scriptsize{The dynamic is evaluated considering the history of Mar/1999 to Mar/2016 and the ten most recent years data.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\vspace{0.3cm}
+
+\begin{table}[h]
+\centering
+\caption{Forecasting inflation rate using core inflation}\label{infla_prev_toda_ipc}
+\begin{threeparttable}
+\begin{tabular}{@{}clccc@{}}
+\toprule
+                                   & \textbf{}                          & \textbf{$\bar{R}^2$} & \textbf{$\beta$} & \textbf{t-stat} \\ \midrule
+\multirow{2}{*}{\textbf{$h = 12$}} & \multicolumn{1}{l|}{TF core inflation}           & 0.28   & 0.687 (0.0786)   & 8.737*** \\
+                                   & \multicolumn{1}{l|}{TF core inflation (recent)}  & 0.15   & 0.381 (0.0809)   & 4.701*** \\ \midrule
+\multirow{2}{*}{\textbf{$h = 24$}} & \multicolumn{1}{l|}{TF core inflation}           & 0.29   & 0.745 (0.0871)   & 8.562*** \\
+                                   & \multicolumn{1}{l|}{TF core inflation (recent)}  & 0.20   & 0.575 (0.1026)   & 5.602*** \\ \bottomrule
+
+\end{tabular}
+\begin{tablenotes}
+\item \scriptsize{Note: $\beta$ standard deviation in parenthesis; t-stat is the test statistic of $\beta$ parameter.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+%\vspace{0.5cm}
+
+\newpage
+
+Also it is necessary to assess whether over time the TF core inflation trajectory remains similar to adding new observations, since seasonal adjustment is used. For this evaluation, we adopted the following:
+
+% Também faz-se necessário avaliar se ao longo do tempo a trajetória do núcleo TF permanece similar ao acrescentar novas observações, uma vez que há o uso de ajuste sazonal. Para tal avaliação, adotou-se o seguinte procedimento:
+
+\begin{enumerate}
+\setlength\itemsep{0.1em}
+
+\item{Setting the specification of seasonal adjustment model considering only the data until Dec 2014;}
+\item{Run the seasonal adjustment month-to-month from Jan 2015 to Mar 2016 according to the specification defined in (1) and store the result of each month;}
+\item{Deseasonalize the full range according to the specification defined in (1) and compare it with the number obtained in (2).}
+%\item{Definir a especificação do modelo de ajuste sazonal considerando apenas os dados até dez/2014;}
+%\item{Executar o ajuste sazonal mês a mês de jan/2015 a mar/2016 de acordo com a especificação definida em (1) e armazenar o resultado de cada mês;}
+%\item{Dessazonalisar a série completa de acordo com a especificação definida em (1) e compará-la com a série obtida em (2).}
+\end{enumerate}
+
+The annualized TF core inflation series obtained from the two previously explained ways can be seen in Figure \ref{avaliacao_sazon}. 
+
+% As séries do núcleo TF anualizadas obtidas das duas formas explicadas anteriormente podem ser visualizadas na Figura \ref{avaliacao_sazon}. 
+
+\begin{figure}[]
+  \centering
+  \includegraphics[width=0.8\textwidth]{avaliacao_sazon_ipc}
+  \caption{Evaluation of seasonal adjustment (annual data)}
+  \label{avaliacao_sazon}
+\end{figure}
+
+Note that from 2014 there is a small change between the two series. This change is most evident in the months of January and February 2016, in which the difference between the series is, respectively, 0.5 and 0.4 percentage points (with annualized information). Except in the months of March and April 2015  wherein the estimated core inflation with the complete series moves from 8.5\% to 8.6\% while the other core inflation recedes from 8.4\% to 8.3\%, the trajectory of the core inflations is similar. These results show the robustness of the proposed core inflation and that the seasonal adjustment month-to-month is similar when using all the observations of the series available. This result and others (softness, bias, cointergration, adjustment dynamic, seasonal robustness and prediction) shown in this section show the quality of the measure of the core inflation proposal.
+
+% Nota-se que a partir de 2014 ocorre uma pequena mudança entre as duas séries. Essa mudança é mais evidente nos meses de janeiro e fevereiro de 2016, em que a diferença entre as séries é de, respectivamente, 0,5 e 0,4 ponto percentual (com informação anualizada). Exceto nos meses de março e abril de 2015 em que o núcleo estimado com a série completa avança de 8,5 para 8,6\% enquanto o outro núcleo retrocede de 8,4 para 8,3\%, a trajetória dos núcleos é similar. Tais resultados mostram a robustez do núcleo proposto e que o ajuste sazonal feito mês a mês é similar quando se utiliza todos as observações da série disponíveis. Esse resultado e os outros (suavidade, viés, cointegração, dinâmica de ajustamento, robustez sazonal e previsão) mostrados nessa seção evidenciam a qualidade da medida de núcleo proposta.
+
+Still in order to show the usefulness of TF core inflation, shown in Figure \ref{nucleotf_ipcacum} is the annualized core against the CPI accumulated in 12 months. The latter is the main drive of the general public to follow the trajectory of inflation (\cite{ferreira2016, silvia}). It appears that the \textit{turning points} of inflation behavior are perceived faster with TF core inflation. For example, in 2010, the core inflation floated around 6\%, exceeding the ceiling of the inflation target in November (6.7\%). By analyzing the accumulated inflation, however, one only notices a flirtation with the target ceiling 6 months later in May 2011. In 2013, the same happens: the core inflation floats around the target ceiling and  passes it three times in February, March and November, however, the accumulated inflation only came to exceed the ceiling for the first time in May 2014.
+
+% Ainda com finalidade de mostrar a utilidade do núcleo TF, apresenta-se na Figura \ref{nucleotf_ipcacum} o núcleo TF anualizado contra o IPC acumulado em 12 meses. Este último sendo o principal drive do público em geral para acompanhar a trajetória da inflação (\cite{ferreira2016,silvia}). Verifica-se que os \textit{turning points} do comportamento da inflação são percebidos mais rápidos com o núcleo TF. Por exemplo, em 2010, o núcleo flutuava em torno de 6\%, chegando a ultrapassar o teto da meta da inflação em novembro (6,7\%). Ao analisar a inflação acumulada, no entanto, só se percebe um flerte com o teto da meta 6 meses depois em maio de 2011. Em 2013, o mesmo acontece: o núcleo flutua em torno do teto da meta e chega a ultrapassá-lo três vezes nos meses de fevereiro, março e novembro, no entanto, a inflação acumulada só veio a ultrapassar o teto da meta pela primeira vez em maio de 2014.
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{nucleotf_ipcacum}
+  \caption{Annualized TF core inflation and 12-month cumulative CPI - Mar/1999 a Mar/2016}
+  \label{nucleotf_ipcacum}
+\end{figure}
+
+\clearpage
+
+\section{Final Remarks}\label{consid}
+
+The results shown in this article demonstrate that the TF core inflation should be used as a reference measure for the inflation path in place of the traditional core inflations, especially in countries with higher inflation and regulated prices, as is the case of Brazil. In this context, the traditional core inflations bring little information about the trajectory of the general price level, so the argument of simplicity in the core inflation calculation is not valid like it is in countries like the US who only remove energy and food from the estimate.
+
+%Os resultados mostrados nesse artigo permitem concluir que o núcleo TF deve ser usado como medida de referência para a trajetória da inflação no lugar dos núcleos tradicionais, principalmente em países com inflação mais elevada e preços regulados, como é o caso do Brasil. Nesse contexto, os núcleos tradicionais trazem pouca informação sobre a trajetória do nível geral dos preços, assim, o argumento de simplicidade no cálculo do núcleo não é válido como é em países como os EUA que apenas removem energia e alimentação na estimativa.
+
+An important feature of TF core inflation is the improved communication between the monetary authority and the general public. Being a measure little influenced by discrepant events and seasonal effects, the annualization becomes feasible (an uncommon practice in countries with high inflation) allowing the public to have a clearer idea about the behavior of prices over a full year without having to carry a significant load of information from 12 months ago (a common practice in countries with high inflation is accumulating inflation over 12 months). Significant, because the core inflation also carries the past 12 months of information, however variations are softer due to the smoothing methodology in the calculation of trimmed mean and are applied to only 37\% of the basket of products. It is important that the property of the TF core inflation to save little past information allows a variation in the clearest tip to events occurring at the present time.
+
+% Uma característica importante do núcleo TF é a melhoria de comunicação entre a autoridade monetária e o público em geral. Por ser uma medida pouco influenciada por eventos discrepantes e efeitos sazonais, a anualização torna-se factível (prática pouco comum em países com inflação alta) permitindo que o público tenha uma ideia mais clara sobre o comportamento dos preços ao longo de um ano completo sem que haja o carregamento expressivo de informações de 12 meses atrás (prática comum em países com inflação elevada é acumular a inflação em 12 meses). Diz-se expressivo, pois o núcleo também carrega informações de 12 meses passados, no entanto as variações são mais suaves devido a metodologia de suavização no cálculo de médias aparadas e são aplicadas apenas a 37\% da cesta de produtos. É relevante que a propriedade do núcleo TF em guardar pouca informação do passado permite uma variação na ponta mais fidedigna aos eventos que ocorrem no tempo presente.
+
+Such features previously argued (clearer trend, improved communication, clearer view with what happens in the present time) are easily confirmed observing the history of the TF core inflation and relating it to the events in Brazil. By comparing Figures  \ref{nucleos_brasil} and \ref{ipc_nucleo},  it  is easy to see that the tendency of the TF core inflation is lighter and less volatile as compared with traditional cores. As for annualization and improved communication, observing Figure \ref{ipc_nucleo}, there are three events that support this argument. It appears that since 2003 there is a clear convergence of inflation to the target, achieved in 2006, and inflation remains on target to approximately the end of 2010. From this period, inflation measured by the core inflation touches the target ceiling until January 2014, when the goal is not met.
+
+% Tais características argumentadas anteriormente (tendência mais clara, melhoria na comunicação, “honestidade” com o que ocorre no tempo presente) são facilmente confirmadas obsvervando o histórico do núcleo TF e relacionando-o com os eventos ocorridos no Brasil. Ao comparar as Figuras \ref{nucleos_brasil} e \ref{ipc_nucleo}, é fácil ver que a tendência do núcleo TF é mais clara e menos volátil quando comparada com os núcleos tradicionais. Quanto à anualização e a melhoria na comunicação, observando a Figura \ref{ipc_nucleo}, há três eventos que corroboram esse argumento. Verifica-se que a partir de 2003 há uma clara convergência da inflação para a meta, alcançada em 2006, e a inflação continua na meta até, aproximadamente, o final de 2010. A partir desse período, a inflação medida pelo núcleo tangencia o teto da meta até janeiro de 2014, quando a meta não é mais cumprida. 
+
+The third characteristic is observed when comparing the TF core inflation over 12 months (Figure \ref{nucleotf_ipcacum}), where it appears that the behavior of the accumulated inflation is perceived faster with TF core inflation. It can be argued that the policymakers use other techniques besides the accumulated inflation in 12 months and therefore have full knowledge of price movements. However, in Brazil, the main  tool used by the general public to assess where inflation is at the present time is the accumulated inflation over 12 months, and this, by definition, carries with it a large amount of past information, which may not reflect the current price situation. Therefore, the TF core inflation will allow the general public to have a more accurate understanding of the trend of prices allowing greater vigilance to short-term movements of price increase and, on the other hand, a smaller effort from the Central Bank to decrease price levels and, in the future, may serve as an anchor in the dissemination process for the Brazilian society in general.
+
+% A terceira característica é observada ao comparar o núcleo TF à inflação acumulada em 12 meses (Figura \ref{nucleotf_ipcacum}), em que verifica-se que o comportamento da inflação acumulada é percebido mais rápido com o núcleo TF. Pode-se argumentar que os \textit{policymakers} utilizam outras técnicas além da inflação acumulada em 12 meses e que por isso tem pleno conhecimento dos movimentos dos preços. Contudo, no Brasil, a principal ferramenta do público em geral para avaliar onde a inflação está no tempo presente é a inflação acumulada em 12 meses, sendo que esta, por definição, carrega em seu histórico grande quantidade de informações passadas, que podem não refletir a situação atual dos preços. Portanto, o núcleo TF permitirá que o público em geral tenha um conhecimento mais correto sobre a tendência dos preços permitindo maior vigilância aos movimentos de curto prazo de aumento dos preços e, por outro lado, um esforço menor do BC em movimentos de diminuição do nível dos preços e, no futuro, poderá funcionar como âncora do processo de disseminação para a sociedade brasileira em geral.
+
+Finally, a natural continuation of this work will be the treatment of the smoothing of the administered prices and other predefined items (section \ref{metodologia}) adopted in conjunction with the method of trimmed mean. Such treatment will allow the TF core inflation to better reflect inflation in the present time.
+
+% Por fim, uma continuação natural desse trabalho será o tratamento da suavização dos preços administrados e de outros itens prédefinidos (seção \ref{metodologia}) adotada em conjunto com o  método de médias aparadas. Tal tratamento permitirá que o núcleo TF reflita ainda melhor a inflação no tempo presente.
+
+
+%\bibliographystyle{rss_port}{}
+\bibliographystyle{apa-good}
+\bibliography{biblio_inflação}
+
+\end{document}
