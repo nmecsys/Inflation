@@ -5,22 +5,34 @@
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 \author{
-Fernando Teixeira\\Getulio Vargas Foundation \And Second Author\\Affiliation
+Pedro Costa Ferreira\\FGV \And Fernando Teixeira\\FGV \And Talitha Speranza\\FGV
 }
-\title{Triple Filter Core Inflation: measuring inflation trajectory with
-\pkg{INFLATION}}
+\title{Triple Filter: measuring trajectory with \pkg{INFLATION}}
 
-\Plainauthor{Fernando Teixeira, Second Author}
-\Plaintitle{Triple Filter Core Inflation: measuring inflation trajectory with
-Package INFLATION}
-\Shorttitle{\pkg{foo}: A Capitalized Title}
+\Plainauthor{Pedro Costa Ferreira, Fernando Teixeira, Talitha Speranza}
+\Plaintitle{Triple Filter Core Inflation: measuring trajectory with Package
+INFLATION}
+\Shorttitle{\pkg{INFLATION}: Triple Filter Core Inflation}
 
 \Abstract{
-The abstract of the article.
+The \proglang{R} package \pkg{INFLATION} provides functions to estimate
+the core inflation. Apart from the established exclusion
+(\code{core.ex}), trimming (\code{core.ma}) and double weighting
+(\code{core.dp}) core inflation filters the package brings a new way to
+estimate core inflation. In countries with higher inflation rates than
+traditional OECD countries, as is the case of Brazil, the existent
+filters do not seem to deliver much information about prices' level. To
+address this issue, we implement the Triple-Filter core inflation. This
+method consists of trimming the mean with smoothed items, perform a
+seasonal adjustment and finally applying moving average. This paper
+constitutes a companion paper to the package, introducing the core
+functions parameters, detailing all the core estimation techniques and
+providing implementation details. It also presents examples where the
+Triple Filter outperforms the more orthodox alternatives.
 }
 
-\Keywords{keywords, not capitalized, \proglang{R}}
-\Plainkeywords{keywords, not capitalized, R}
+\Keywords{inflation, core, filter, \proglang{R}}
+\Plainkeywords{inflation, core, filter, R}
 
 %% publication information
 %% \Volume{50}
@@ -31,12 +43,22 @@ The abstract of the article.
 %% \Acceptdate{2012-06-04}
 
 \Address{
-    Fernando Teixeira\\
-  Getulio Vargas Foundation\\
-  First line Second line\\
+    Pedro Costa Ferreira\\
+  FGV\\
+  Endereço: Rua Barão de Itambi, 60 - Botafogo CEP: 22231-000\\
+  E-mail: \email{pedro.ferreira@fgv.br}\\
+  URL: \url{http://portalibre.fgv.br/}\\~\\
+      Fernando Teixeira\\
+  FGV\\
+  Endereço: Rua Barão de Itambi, 60 - Botafogo CEP: 22231-000\\
   E-mail: \email{fernando.teixeira@fgv.br}\\
-  URL: \url{http://rstudio.com}\\~\\
-    }
+  URL: \url{http://portalibre.fgv.br/}\\~\\
+      Talitha Speranza\\
+  FGV\\
+  Endereço: Rua Barão de Itambi, 60 - Botafogo CEP: 22231-000\\
+  E-mail: \email{talitha.speranza@fgv.br}\\
+  URL: \url{http://portalibre.fgv.br/}\\~\\
+  }
 
 \usepackage{amsmath}
 
@@ -45,9 +67,32 @@ The abstract of the article.
 \section{Introduction}\label{introduction}
 
 This template demonstrates some of the basic latex you'll need to know
-to create a JSS article.
+to create a JSS article. \citep{quah1995measuring}
 
-\subsection{Code formatting}\label{code-formatting}
+\section{Exclusion Core Inflation}\label{exclusion-core-inflation}
+
+The exclusion core inflation is easy to understand and doesn't demand
+much computational power which makes it a big asset. With this method we
+perform an exclusion of some of the prices' index items.
+
+\subsection{Compute time series' standard
+deviation}\label{compute-time-series-standard-deviation}
+
+\begin{align}
+\sigma_{i} = \sqrt{\frac{\sum\nolimits_{t=1}^{T}{(\pi_{i,t}-\bar{\pi}_{i}})^2}{T-1}}
+\end{align}
+
+Where:
+
+\begin{itemize}
+\tightlist
+\item
+  \(\sigma_i\) is item's \(i\) standard deviation
+\item
+  \(\pi_{i,t}\) is the item's \(i\) variation in time \(t\) ;
+\item
+  \(\bar{\pi}_{i} = \frac{\sum_{t=1}^{T}{\pi_{i,t}}}{T}\)
+\end{itemize}
 
 Don't use markdown, instead use the more precise latex commands:
 
@@ -77,6 +122,7 @@ R> x
 \end{CodeOutput}
 \end{CodeChunk}
 
+\bibliography{artigo_jss}
 
 
 \end{document}

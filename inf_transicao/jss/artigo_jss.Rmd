@@ -1,36 +1,65 @@
 ---
 author:
-  - name: Fernando Teixeira
-    affiliation: Getulio Vargas Foundation
+  - name: Pedro Costa Ferreira
+    affiliation: FGV
     address: >
-      First line
-      Second line
+      Endereço: Rua Barão de Itambi, 60 - Botafogo
+      CEP: 22231-000
+    email: \email{pedro.ferreira@fgv.br}
+    url: http://portalibre.fgv.br/
+  - name: Fernando Teixeira
+    affiliation: FGV
+    address: >
+      Endereço: Rua Barão de Itambi, 60 - Botafogo
+      CEP: 22231-000
     email: \email{fernando.teixeira@fgv.br}
-    url: http://rstudio.com
-  - name: Second Author
-    affiliation: Affiliation
+    url: http://portalibre.fgv.br/
+  - name: Talitha Speranza
+    affiliation: FGV
+    address: >
+      Endereço: Rua Barão de Itambi, 60 - Botafogo
+      CEP: 22231-000
+    email: \email{talitha.speranza@fgv.br}
+    url: http://portalibre.fgv.br/
+
 title:
-  formatted: "Triple Filter Core Inflation: measuring inflation trajectory with \\pkg{INFLATION}"
+  formatted: "Triple Filter: measuring trajectory with \\pkg{INFLATION}"
   # If you use tex in the formatted title, also supply version without
-  plain:     "Triple Filter Core Inflation: measuring inflation trajectory with Package INFLATION"
+  plain:     "Triple Filter Core Inflation: measuring trajectory with Package INFLATION"
   # For running headers, if needed
-  short:     "\\pkg{foo}: A Capitalized Title"
-abstract: >
-  The abstract of the article.
+  short:     "\\pkg{INFLATION}: Triple Filter Core Inflation"
+abstract: > 
+    The \proglang{R} package \pkg{INFLATION} provides functions to estimate the core inflation. Apart from the established exclusion (\code{core.ex}), trimming (\code{core.ma}) and double weighting (\code{core.dp}) core inflation filters the package brings a new way to estimate core inflation. In countries with higher inflation rates than traditional OECD countries, as is the case of Brazil, the existent filters do not seem to deliver much information about prices' level. To address this issue, we implement the Triple-Filter core inflation. This method consists of trimming the mean with smoothed items, perform a seasonal adjustment and finally applying moving average. This paper constitutes a companion paper to the package, introducing the core functions parameters, detailing all the core estimation techniques and providing implementation details. It also presents examples where the Triple Filter outperforms the more orthodox alternatives. 
 keywords:
   # at least one keyword must be supplied
-  formatted: [keywords, not capitalized, "\\proglang{R}"]
-  plain:     [keywords, not capitalized, R]
+  formatted: [inflation, core, filter, "\\proglang{R}"]
+  plain:     [inflation, core, filter, R]
 preamble: >
   \usepackage{amsmath}
+bibliography: artigo_jss.bib
 output: rticles::jss_article
 ---
 
 # Introduction
 
-This template demonstrates some of the basic latex you'll need to know to create a JSS article.
+This template demonstrates some of the basic latex you'll need to know to create a JSS article. [@quah1995measuring]
 
-## Code formatting
+# Exclusion Core Inflation
+
+The exclusion core inflation is easy to understand and doesn't demand much computational power which makes it a big asset. With this method we perform an exclusion of some of the prices' index items. 
+
+## Compute time series' standard deviation
+
+\begin{align}
+\sigma_{i} = \sqrt{\frac{\sum\nolimits_{t=1}^{T}{(\pi_{i,t}-\bar{\pi}_{i}})^2}{T-1}}
+\end{align}
+
+Where:
+
+* $\sigma_i$ is item's $i$ standard deviation
+* $\pi_{i,t}$ is the item's $i$ variation in time $t$ ; 
+* $\bar{\pi}_{i} = \frac{\sum_{t=1}^{T}{\pi_{i,t}}}{T}$
+
 
 Don't use markdown, instead use the more precise latex commands:
 
