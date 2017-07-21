@@ -2,11 +2,15 @@ Package: INFLATION
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Date: 2017-07-21
+Authors@R: c(person("Pedro", "Costa Ferreira", email = "pedro.guilherme@fgv.br", role = c("aut", "cre")),
+              person("Daiane", "Marcolino", email = "daiane.marcolino@fgv.br", role = "aut"),  
+              person("Talitha", "Speranza", email = "talitha.speranza@fgv.br", role = "aut"),
+			        person("Fernando", "Teixeira", email = "fernando.teixeira@fgv.br", role = "aut"))
+Maintainer: Pedro Costa Ferreira <pedro.guilherme@fgv.br>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+License: MIT
 Encoding: UTF-8
 LazyData: true
 Imports: Rcpp (>= 0.12.10)
