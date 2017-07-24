@@ -21,6 +21,13 @@ author:
       CEP: 22231-000
     email: \email{talitha.speranza@fgv.br}
     url: http://portalibre.fgv.br/
+  - name: Talitha Speranza
+    affiliation: FGV
+    address: >
+      Endereço: Rua Barão de Itambi, 60 - Botafogo
+      CEP: 22231-000
+    email: \email{talitha.speranza@fgv.br}
+    url: http://portalibre.fgv.br/
 
 title:
   formatted: "Triple Filter: measuring trajectory with \\pkg{INFLATION}"

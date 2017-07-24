@@ -142,4 +142,4 @@ core.ma <- function(sub, pesos, inf = 20, sup = 20, suave = FALSE, janela = 12){
 }
 
 
-core_ma <- core.ma(sub = a$ipca_ts, pesos = a$pesos_ts)
+# core_ma <- core.ma(sub = a$ipca_ts, pesos = a$pesos_ts)
