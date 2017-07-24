@@ -1,21 +1,21 @@
 #' Núcleo de inflação por exclusão
-#' @param grupamento Grupamento determina o que será retornado: subgrupos, itens ou subitens 
+#' @param grupamento Grupamento determina o que será retornado: subgrupos, itens ou subitens
 #' @keywords core ipca
 #' @encoding utf8
 #' @export
-#' @importFrom ecoseries series_sidra 
+#' @importFrom ecoseries series_sidra
 #' @import dplyr tidyr tibble
-#' @examples 
+#' @examples
 #' ipc.ex1 <- core.ex(variacao.ts$subitens, pesos.ts$subitens)
-#' 
+#'
 #' # ex2: excluindo alimentação
 #' novos_pesos <- pesos.ts$subitens
 #' novos_pesos[,substr(colnames(novos_pesos), 5,5) == 1] <- 0
 #' novos_pesos <- (novos_pesos/rowSums(novos_pesos, na.rm = TRUE))*100
-#' ipc.ex3 <- ts(rowSums(variacao.ts$subitens*novos_pesos, 
+#' ipc.ex3 <- ts(rowSums(variacao.ts$subitens*novos_pesos,
 #' na.rm = TRUE)/100, start = start(variacao.ts$subitens), freq = 12)
-#' 
-#' 
+#'
+#'
 #' # gráficos
 #' ts.plot(variacao.ts$ipc, ipc.ex1, col = c(1:2), lwd = 1:2)
 #' ts.plot(variacao.ts$ipc, ipc.ex3, col = c(1:2), lwd = 1:2)
@@ -23,10 +23,10 @@
 
 ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
 
-    
+
     grupamento <- base::match.arg(grupamento)
-    
-    
+
+
     # Todas as secões associadas a esta Tabela (1419)
 
     section = c(7169,7170,7171,7172,7173,7175,7176,7177,12222,7184,7185,7187,
@@ -66,48 +66,50 @@ ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
                 107674,7777,7778,7779,107676,107677,7782,7783,7784,7785,107678,107679,
                 107680,107681,107682,12428,7786,7787,7788,7789,7790,7791,7792,107688,
                 7794,12429,12430)
-    
-    
-    geral <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315, 
-                                     sections = 7169, variable = 63)
-    
+
+
+
+
 
     # Buscamos os valores até o último mês
     month <- Sys.Date()
     data_hj <- format(month, "%Y%m")
     from = 201201
 
+    geral <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315,
+                                     sections = 7169, variable = 63)
+
 
 
     if(grupamento == "subitem"){
 
 # Procurando os subitens ---------------------------------------------------------------
-    
-    
-    teste <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315, 
+
+
+    teste <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315,
                                      sections = section, variable = 63)
-    
-    
-    
+
+
+
     # Pegamos todos os códigos e filtramos só os subitens (a lista contém 454 elementos contando o geral, que é retirado)
     t1 = teste$serie_1419$`Geral, grupo, subgrupo, item e subitem`[1:454]
     t1 = unlist(t1)
     t2 = strsplit(t1, split = "\\.")
     t2 = unlist(t2)
     t2 = t2[2:907]
-    
+
     # Cria-se um dicionário com TODOS os grupos-itens-subitens e seus códigos
-    
+
     dicionario <- matrix(t2, nrow=2)
     dicionario <- t(dicionario)
     dicionario <- as.data.frame(dicionario, stringsAsFactors = FALSE)
     dicionario[,1] <- as.numeric(dicionario[,1])
-    
-    
+
+
     # Criamos uma sequencia pegando apenas números ímpares (para puxar os códigos e não as descrições)
     sequencia <- seq(from=1, to=length(t2), by=2)
-    
-    
+
+
     # Loop que puxa apenas os valores associados aos subitens (>=5)
     t3 <- c()
     for( i in sequencia){
@@ -115,9 +117,9 @@ ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
             t3 <- c(t3, t2[i], t2[i+1])
         }
     }
-    
-    
-    
+
+
+
     # Transforma em data frame e numérico
     tmatriz <- matrix(t3, nrow=2)
     tmatriz = t(tmatriz)
@@ -129,55 +131,55 @@ ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
     a <- cbind(dicionario, section[2:454])
     codigos_sub_ipca <- dplyr::left_join(tmatriz, a, by = c("V1", "V2"))
     colnames(codigos_sub_ipca)[3] <- "cod"
-    
+
     # Puxando apenas os códigos desejados (subitens) do dataframe e aplicando à função tanto para o IPCA quanto para os pesos associados
     section2 <- codigos_sub_ipca$cod
-    
-    
+
+
     ipca <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315,
                                       sections = section2, variable = 63)
     ipca <- ipca$serie_1419
-    
+
     pesos <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315,
                                       sections = section2, variable = 66)
     pesos <- pesos$serie_1419
-    
-    
+
+
     colnames(tmatriz) <- c("subitem", "cod_subitens")
     tmatriz3 <- tmatriz
-    
-    
-    
-    
+
+
+
+
     } else if(grupamento == "item"){
-    
+
 # Procurando os itens ---------------------------------------------------------------
-    
-    
-    teste <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315, 
+
+
+    teste <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315,
                                      sections = section, variable = 63)
-    
-    
-    
+
+
+
     # Pegamos todos os códigos e filtramos só os subgrupos (a lista contém 454 elementos contando o geral, que é retirado)
     t1 = teste$serie_1419$`Geral, grupo, subgrupo, item e subitem`[1:454]
     t1 = unlist(t1)
     t2 = strsplit(t1, split = "\\.")
     t2 = unlist(t2)
     t2 = t2[2:907]
-    
+
     # Cria-se um dicionário com TODOS os grupos-itens-subitens e seus códigos
-    
+
     dicionario <- matrix(t2, nrow=2)
     dicionario <- t(dicionario)
     dicionario <- as.data.frame(dicionario, stringsAsFactors = FALSE)
     dicionario[,1] <- as.numeric(dicionario[,1])
-    
-    
+
+
     # Criamos uma sequencia pegando apenas números ímpares (para puxar os códigos e não as descrições)
     sequencia <- seq(from=1, to=length(t2), by=2)
-    
-    
+
+
     # Loop que puxa apenas os valores associados aos subgrupos (>=5)
     t3 <- c()
     for( i in sequencia){
@@ -185,68 +187,68 @@ ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
             t3 <- c(t3, t2[i], t2[i+1])
         }
     }
-    
-    
+
+
     # Transforma em data frame e numérico
     tmatriz <- matrix(t3, nrow=2)
     tmatriz = t(tmatriz)
     tmatriz <- as.data.frame(tmatriz, stringsAsFactors = FALSE)
     tmatriz[,1] <- as.numeric(tmatriz[,1])
 
-    
+
     # JUntando os valores dos códigos na tabela às descrições e aos números associados na API
     # require(dplyr)
     a <- cbind(dicionario, section[2:454])
     codigos_sub_ipca <- dplyr::left_join(tmatriz, a, by = c("V1", "V2"))
     colnames(codigos_sub_ipca)[3] <- "cod"
-    
+
     # Puxando apenas os códigos desejados (subgrupos) do dataframe e aplicando à função tanto para o IPCA quanto para os pesos associados
     section2 <- codigos_sub_ipca$cod
-    
-    
+
+
     ipca <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315,
                                     sections = section2, variable = 63)
     ipca <- ipca$serie_1419
-    
+
     pesos <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315,
                                      sections = section2, variable = 66)
     pesos <- pesos$serie_1419
-    
-    
+
+
     colnames(tmatriz) <- c("item", "cod_item")
-    
+
     tmatriz2 <- tmatriz
-    
-    
-    
+
+
+
     } else if(grupamento == "subgrupo"){
-    
+
 # Procurando os subgrupos -----------------------------------------------------
-    
-    teste <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315, 
+
+    teste <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315,
                                      sections = section, variable = 63)
-    
-    
-    
+
+
+
     # Pegamos todos os códigos e filtramos só os subgrupos (a lista contém 454 elementos contando o geral, que é retirado)
     t1 = teste$serie_1419$`Geral, grupo, subgrupo, item e subitem`[1:454]
     t1 = unlist(t1)
     t2 = strsplit(t1, split = "\\.")
     t2 = unlist(t2)
     t2 = t2[2:907]
-    
+
     # Cria-se um dicionário com TODOS os grupos-itens-subitens e seus códigos
-    
+
     dicionario <- matrix(t2, nrow=2)
     dicionario <- t(dicionario)
     dicionario <- as.data.frame(dicionario, stringsAsFactors = FALSE)
     dicionario[,1] <- as.numeric(dicionario[,1])
-    
-    
+
+
     # Criamos uma sequencia pegando apenas números ímpares (para puxar os códigos e não as descrições)
     sequencia <- seq(from=1, to=length(t2), by=2)
-    
-    
+
+
     # Loop que puxa apenas os valores associados aos subgrupos (>=5)
     t3 <- c()
     for( i in sequencia){
@@ -254,90 +256,90 @@ ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
             t3 <- c(t3, t2[i], t2[i+1])
         }
     }
-    
-    
+
+
     # Transforma em data frame e numérico
     tmatriz <- matrix(t3, nrow=2)
     tmatriz = t(tmatriz)
     tmatriz <- as.data.frame(tmatriz, stringsAsFactors = FALSE)
     tmatriz[,1] <- as.numeric(tmatriz[,1])
-    
-    
+
+
     # Juntando os valores dos códigos na tabela às descrições e aos números associados na API
     # require(dplyr)
     a <- cbind(dicionario, section[2:454])
     codigos_sub_ipca <- dplyr::left_join(tmatriz, a, by = c("V1", "V2"))
     colnames(codigos_sub_ipca)[3] <- "cod"
-    
+
     # Puxando apenas os códigos desejados (subgrupos) do dataframe e aplicando à função tanto para o IPCA quanto para os pesos associados
     section2 <- codigos_sub_ipca$cod
-    
-    
+
+
     ipca <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315,
                                     sections = section2, variable = 63)
     ipca <- ipca$serie_1419
-    
+
     pesos <- ecoseries::series_sidra(1419, from = from, to = data_hj, cl=315,
                                      sections = section2, variable = 66)
     pesos <- pesos$serie_1419
-    
+
     colnames(tmatriz) <- c("item", "cod_item")
-    
-    } 
-    
+
+    }
+
 # Juntando subgrupos, itens e subitens -------------------------------------------
-    
+
     # ipca2 <- ipca
     # pesos2 <- pesos
-    
+
     #ipca <- INFLATION::ipca
     #pesos <- INFLATION::pesos
-    
-    
+
+
     s <- substr(ipca$`Geral, grupo, subgrupo, item e subitem`, 1, 2)
     ipca$grupo <- as.numeric(s)
     s2 <- substr(ipca$`Geral, grupo, subgrupo, item e subitem`, 1, 4)
     ipca$item <- as.numeric(s2)
     s3 <- substr(ipca$`Geral, grupo, subgrupo, item e subitem`, 1, 7)
     ipca$subitem <- as.numeric(s3)
-    
-    
-    
+
+
+
     nome <- colnames(tmatriz)[1]
 
     ipca <- dplyr::left_join(ipca, tmatriz, by = nome)
     # ipca <- dplyr::left_join(ipca, tmatriz2)
     # ipca <- dplyr::left_join(ipca, tmatriz3)
-    
-    
-    
+
+
+
     s <- substr(pesos$`Geral, grupo, subgrupo, item e subitem`, 1, 2)
     pesos$grupo <- as.numeric(s)
     s2 <- substr(pesos$`Geral, grupo, subgrupo, item e subitem`, 1, 4)
     pesos$item <- as.numeric(s2)
     s3 <- substr(pesos$`Geral, grupo, subgrupo, item e subitem`, 1, 7)
     pesos$subitem <- as.numeric(s3)
-    
+
     pesos <- dplyr::left_join(pesos, tmatriz, by = nome)
     # pesos <- dplyr::left_join(pesos, tmatriz2)
     # pesos <- dplyr::left_join(pesos, tmatriz3)
-    
-    
-    
+
+
+
 # Formatando para Daiane --------------------------------------------------
-    
-    
-    
-    ipca$mes <- sapply(ipca["M\u00EAs"], FUN = function(x){substr(x,1,(nchar(x)-5))}) 
-    ipca$ano <- sapply(ipca["M\u00EAs"], FUN = function(x){substr(x,(nchar(x)-3), nchar(x))}) 
+
+
+
+    ipca$mes <- sapply(ipca["Data"], FUN = function(x){substr(x,6,7)})
+    ipca$ano <- sapply(ipca["Data"], FUN = function(x){substr(x,1, 4)})
     colnames(ipca)[4] = c("variavel")
-    
-    pesos$mes <- sapply(pesos["M\u00EAs"], FUN = function(x){substr(x,1,(nchar(x)-5))}) 
-    pesos$ano <- sapply(pesos["M\u00EAs"], FUN = function(x){substr(x,(nchar(x)-3), nchar(x))}) 
+
+    pesos$mes <- sapply(pesos["Data"], FUN = function(x){substr(x,6,7)})
+    pesos$ano <- sapply(pesos["Data"], FUN = function(x){substr(x,1, 4)})
     colnames(pesos)[4] = c("variavel")
 
-    
-    
+
+
     ipca$mes[ipca$mes == "janeiro"] <- "01"
     ipca$mes[ipca$mes == "fevereiro"] <- "02"
     ipca$mes[ipca$mes == "mar\u00E7o"] <- "03"
@@ -350,7 +352,7 @@ ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
     ipca$mes[ipca$mes == "outubro"] <- "10"
     ipca$mes[ipca$mes == "novembro"] <- "11"
     ipca$mes[ipca$mes == "dezembro"] <- "12"
-    
+
     pesos$mes[pesos$mes == "janeiro"] <- "01"
     pesos$mes[pesos$mes == "fevereiro"] <- "02"
     pesos$mes[pesos$mes == "mar\u00E7o"] <- "03"
@@ -363,59 +365,59 @@ ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
     pesos$mes[pesos$mes == "outubro"] <- "10"
     pesos$mes[pesos$mes == "novembro"] <- "11"
     pesos$mes[pesos$mes == "dezembro"] <- "12"
-    
+
     ipca$mes_ano <- paste0(ipca$ano, "-",ipca$mes, "-01")
     ipca$mes_ano <- as.Date(ipca$mes_ano)
     pesos$mes_ano <- paste0(pesos$ano, "-",pesos$mes, "-01")
     pesos$mes_ano <- as.Date(pesos$mes_ano)
-    
-    
-    
-    
+
+
+
+
     # library(tidyr)
-    
-    
+
+
     ipca <- cbind(ipca[,length(ipca[1,])], ipca[,4:11])
     ipca <- tibble::as_data_frame(ipca)
     ipca_wide <- tidyr::spread(ipca, key = mes_ano, value = Valor)
     ipca_wide <- ipca_wide[,6:length(ipca_wide[1,])]
-    
 
-    
+
+
     ipca_wide_t <- tibble::as_data_frame(t(ipca_wide[,3:length(ipca_wide)]))
     colnames(ipca_wide_t) <- paste0("cod_",unlist(ipca_wide[,1]))
     ipca_final <- ipca_wide_t
-    
+
     pesos <- cbind(pesos[,length(pesos[1,])], pesos[,4:11])
     pesos <- tibble::as_data_frame(pesos)
     pesos_wide <- tidyr::spread(pesos, key = mes_ano, value = Valor)
     pesos_wide <- pesos_wide[,6:length(pesos_wide[1,])]
     pesos_wide_t <- tibble::as_data_frame(t(pesos_wide[,3:length(pesos_wide)]))
     colnames(pesos_wide_t) <- paste0("cod_",unlist(pesos_wide[,1]))
-    pesos_final <- pesos_wide_t    
-    
-    ipca_ts = ts(ipca_final, start = c(2012,01),  
-                 end = c(as.numeric(format(Sys.Date(), "%Y")), 
+    pesos_final <- pesos_wide_t
+
+    ipca_ts = ts(ipca_final, start = c(2012,01),
+                 end = c(as.numeric(format(Sys.Date(), "%Y")),
                          as.numeric(c(format(Sys.Date(), "%m")))), frequency = 12)
-    pesos_ts = ts(pesos_final, start = c(2012,01),  
-                  end = c(as.numeric(format(Sys.Date(), "%Y")), 
+    pesos_ts = ts(pesos_final, start = c(2012,01),
+                  end = c(as.numeric(format(Sys.Date(), "%Y")),
                           as.numeric(c(format(Sys.Date(), "%m")))), frequency = 12)
-    
-    
-    
+
+
+
     # IPCA geral
     # browser()
-    
-    geral <- ts(geral$serie_1419[7], start = c(2012,01),  
-                end = c(as.numeric(format(Sys.Date(), "%Y")), 
+
+    geral <- ts(geral$serie_1419[7], start = c(2012,01),
+                end = c(as.numeric(format(Sys.Date(), "%Y")),
                         as.numeric(c(format(Sys.Date(), "%m")))), frequency = 12)
-    
-    
-    
-    
+
+
+
+
     #save(ipca_final, file = "ipca_final.rda")
-    ls = list(ipca = ipca_final, pesos = pesos_final, 
-              ipca_ts = ipca_ts, pesos_ts = pesos_ts, 
+    ls = list(ipca = ipca_final, pesos = pesos_final,
+              ipca_ts = ipca_ts, pesos_ts = pesos_ts,
               codigo = ipca_wide[,2], ipca_agrupado = geral)
     return(invisible(ls))
 #
@@ -450,8 +452,8 @@ ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
 
 
 
-# teste <- ecoseries::series_sidra(1419, from = 201201, to = 201703, cl=315, 
+# teste <- ecoseries::series_sidra(1419, from = 201201, to = 201703, cl=315,
 #                                  sections = section, variable = 63)
-# 
-# teste2 <- ecoseries::series_sidra(1419, from = 201201, to = 201703, cl=315, 
+#
+# teste2 <- ecoseries::series_sidra(1419, from = 201201, to = 201703, cl=315,
 #                                   sections = section, variable = 66)

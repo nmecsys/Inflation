@@ -22,18 +22,25 @@ core.ex(sub, pesos, codigos, cortes = 4, alpha = 2)
 Núcleo de inflação por exclusão
 }
 \examples{
-ipc.ex1 <- core.ex(variacao.ts$subitens, pesos.ts$subitens)
+\dontrun{
+load("~/INFLATION/data/codigos.rda")
+load("~/INFLATION/data/pesos.ts.rda")
+load("~/INFLATION/data/variacao.ts.rda")
+codigos <- codigos[2:nrow(codigos),]
 
-# ex2: excluindo alimentação
+ipc.ex1 <- core.ex(sub = variacao.ts$subitens, pesos = pesos.ts$subitens, codigos = codigos,
+cortes = 4, alpha = 2)
+
+# ex2: excluindo alimentaÃ§Ã£o
 novos_pesos <- pesos.ts$subitens
 novos_pesos[,substr(colnames(novos_pesos), 5,5) == 1] <- 0
 novos_pesos <- (novos_pesos/rowSums(novos_pesos, na.rm = TRUE))*100
-ipc.ex3 <- ts(rowSums(variacao.ts$subitens*novos_pesos, 
+ipc.ex3 <- ts(rowSums(variacao.ts$subitens*novos_pesos,
 na.rm = TRUE)/100, start = start(variacao.ts$subitens), frequency = 12)
 
 
-# gráficos
+# grÃ¡ficos
 ts.plot(variacao.ts$ipc, ipc.ex1, col = c(1:2), lwd = 1:2)
-ts.plot(variacao.ts$ipc, ipc.ex3, col = c(1:2), lwd = 1:2)
+ts.plot(variacao.ts$ipc, ipc.ex3, col = c(1:2), lwd = 1:2)}
 }
 \keyword{core}

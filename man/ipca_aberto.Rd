@@ -20,7 +20,7 @@ ipc.ex1 <- core.ex(variacao.ts$subitens, pesos.ts$subitens)
 novos_pesos <- pesos.ts$subitens
 novos_pesos[,substr(colnames(novos_pesos), 5,5) == 1] <- 0
 novos_pesos <- (novos_pesos/rowSums(novos_pesos, na.rm = TRUE))*100
-ipc.ex3 <- ts(rowSums(variacao.ts$subitens*novos_pesos, 
+ipc.ex3 <- ts(rowSums(variacao.ts$subitens*novos_pesos,
 na.rm = TRUE)/100, start = start(variacao.ts$subitens), freq = 12)
 
 

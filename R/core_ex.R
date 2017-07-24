@@ -41,3 +41,6 @@ core.ex <- function(sub, pesos, codigos, cortes = 4, alpha = 2){
 
     ts(rowSums(sub*pesos, na.rm = TRUE)/100, start = start(sub), frequency = 12)
 }
+
+
+# core.ex(sub=a$ipca_ts, pesos = a$pesos_ts, codigos = a$codigo)

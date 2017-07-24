@@ -138,5 +138,8 @@ core.ma <- function(sub, pesos, inf = 20, sup = 20, suave = FALSE, janela = 12){
 
     core <- ts(rowSums(pesos_novos2*sub, na.rm = T)/100, start = start(sub), frequency = 12)
 
-    return(list(core = core, var_in = entrou))
+    return(invisible(list(core = core, var_in = entrou)))
 }
+
+
+core_ma <- core.ma(sub = a$ipca_ts, pesos = a$pesos_ts)
