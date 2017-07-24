@@ -20,7 +20,7 @@ acum12 <- function(x){
     data <- tibble::as_data_frame(data)
 
     data <- (data - 1)*100
-    st <- ts(data, start = start(x), end = end(x), freq = 12)
+    st <- ts(data, start = start(x), end = (end(x) - c(1,0)), freq = 12)
     st
 }
 
