@@ -430,6 +430,7 @@ ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
 
 # a <- ipca_aberto(grupamento = "subitem")
 
+# as.Date(time(a$ipca_agrupado))
 
 
 
