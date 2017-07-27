@@ -1,28 +1,28 @@
 ---
 author:
   - name: Pedro Costa Ferreira
-    affiliation: FGV
+    affiliation: FGV/IBRE
     address: >
       Endereço: Rua Barão de Itambi, 60 - Botafogo
       CEP: 22231-000
     email: \email{pedro.ferreira@fgv.br}
     url: http://portalibre.fgv.br/
   - name: Talitha Speranza
-    affiliation: FGV
+    affiliation: FGV/IBRE
     address: >
       Endereço: Rua Barão de Itambi, 60 - Botafogo
       CEP: 22231-000
     email: \email{talitha.speranza@fgv.br}
     url: http://portalibre.fgv.br/ 
   - name: Fernando Teixeira
-    affiliation: FGV
+    affiliation: FGV/IBRE
     address: >
       Endereço: Rua Barão de Itambi, 60 - Botafogo
       CEP: 22231-000
     email: \email{fernando.teixeira@fgv.br}
     url: http://portalibre.fgv.br/
   - name: Daiane Marcolino
-    affiliation: FGV
+    affiliation: FGV/IBRE
     address: >
       Endereço: Rua Barão de Itambi, 60 - Botafogo
       CEP: 22231-000
