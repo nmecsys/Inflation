@@ -7,6 +7,13 @@ author:
       CEP: 22231-000
     email: \email{pedro.ferreira@fgv.br}
     url: http://portalibre.fgv.br/
+  - name: Talitha Speranza
+    affiliation: FGV
+    address: >
+      Endereço: Rua Barão de Itambi, 60 - Botafogo
+      CEP: 22231-000
+    email: \email{talitha.speranza@fgv.br}
+    url: http://portalibre.fgv.br/ 
   - name: Fernando Teixeira
     affiliation: FGV
     address: >
@@ -14,19 +21,12 @@ author:
       CEP: 22231-000
     email: \email{fernando.teixeira@fgv.br}
     url: http://portalibre.fgv.br/
-  - name: Talitha Speranza
+  - name: Daiane Marcolino
     affiliation: FGV
     address: >
       Endereço: Rua Barão de Itambi, 60 - Botafogo
       CEP: 22231-000
-    email: \email{talitha.speranza@fgv.br}
-    url: http://portalibre.fgv.br/
-  - name: Talitha Speranza
-    affiliation: FGV
-    address: >
-      Endereço: Rua Barão de Itambi, 60 - Botafogo
-      CEP: 22231-000
-    email: \email{talitha.speranza@fgv.br}
+    email: \email{daiane.marcolino@fgv.br}
     url: http://portalibre.fgv.br/
 
 title:
@@ -71,6 +71,23 @@ Where:
 * $\sigma_i$ is item's $i$ standard deviation
 * $\pi_{i,t}$ is the item's $i$ variation in time $t$ ; 
 * $\bar{\pi}_{i} = \frac{\sum_{t=1}^{T}{\pi_{i,t}}}{T}$
+
+
+
+
+\begin{align}\label{equacao_mm3}
+\pi_{i,t}^{TF} = \left [\left (\prod_{i=0}^{2} \frac{\pi_{i,t-i}^{AJ}}{100} + 1  \right )^{\frac{12}{3}} -1 \right ] \times 100.
+\end{align}
+
+\noindent
+Where: \
+
+$\pi_{i,t}^{AJ}$ is the core inflation seasonally adjusted (monthly percent change);\
+
+$\pi_{i,t}^{TF}$ is the annualized Triple-Filter core.\vspace{0.3cm}
+
+The methodology presented will be applied only to the FGV inflation rate (CPI) but can be easily replicated for any consumer price index. The first filtering methodology excludes items with extreme variations that accumulate 20\% of the lower tail and 13\% of the upper tail, leaving 67\% of the original weight of the basket of products. The estimation made by FGV/IBRE considers 20\% for the two tails. The  seasonally adjusted specifications (second filter) were set considering the complete historical series from January 1999 to March 2016. Two outliers were detected (Feb/1999 and Nov/2002), which were kept to perfect the quality of seasonal adjustment. The SARIMA(0 1 1)(1 0 0)$_{12}$ model was fitted was not applied to the processing of the data.
+
 
 
 Don't use markdown, instead use the more precise latex commands:
