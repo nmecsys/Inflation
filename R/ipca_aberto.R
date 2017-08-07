@@ -21,10 +21,10 @@
 #' ts.plot(variacao.ts$ipc, ipc.ex3, col = c(1:2), lwd = 1:2)
 
 
-ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
+ipca_get <- function(group = c("subgroup", "item", "subitem")){
 
 
-    grupamento <- base::match.arg(grupamento)
+    grupamento <- base::match.arg(group)
 
 
     # Todas as secões associadas a esta Tabela (1419)
@@ -221,7 +221,7 @@ ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
 
 
 
-    } else if(grupamento == "subgrupo"){
+    } else if(grupamento == "subgroup"){
 
 # Procurando os subgrupos -----------------------------------------------------
 
@@ -416,9 +416,9 @@ ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
 
 
     #save(ipca_final, file = "ipca_final.rda")
-    ls = list(ipca = ipca_final, pesos = pesos_final,
-              ipca_ts = ipca_ts, pesos_ts = pesos_ts,
-              codigo = ipca_wide[,2], ipca_agrupado = geral)
+    ls = list(ipca = ipca_final, weights = pesos_final,
+              ipca_ts = ipca_ts, weights_ts = pesos_ts,
+              cod = ipca_wide[,2], ipca_index = geral)
     return(invisible(ls))
 #
 
@@ -428,7 +428,7 @@ ipca_aberto <- function(grupamento = c("subgrupo", "item", "subitem")){
 
 
 
-# a <- ipca_aberto(grupamento = "subitem")
+# a <- ipca_get(grupamento = "subitem")
 
 # as.Date(time(a$ipca_agrupado))
 
