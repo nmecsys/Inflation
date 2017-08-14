@@ -26,9 +26,9 @@ core.tf <- function(sub, weights, smoo, inf = 20, sup = 20, wind = 12, ...){
 
     sf <- seasonal::seas(ff$core, ...)
 
-
-    sf_2 <- sf$series$s11
-
+    if(missing(x11)){
+        sf_2 <- sf$series$s11
+    } else {sf_2 <- sf$series$d11}
     tf <- geom3(sf_2)
 
 
