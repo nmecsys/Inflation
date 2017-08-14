@@ -6,6 +6,7 @@
 #' @param sup An \code{integer}. Percentage upper tail cut. Predefined as 20.
 #' @param smoo A \code{vector}. List of codes to be smoothed. If missing, no item will be smoothed.
 #' @param wind An \code{integer}. The volatility's window size to be computed.
+#' @param ... arguments passed on to \link[seasonal]{seas} to compute the seasonal adjustment.
 #'
 #' @return A \code{ts} object.
 #' @keywords core triple filter

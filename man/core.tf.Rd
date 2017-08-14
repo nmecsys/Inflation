@@ -19,6 +19,8 @@ same weight.}
 \item{sup}{An \code{integer}. Percentage upper tail cut. Predefined as 20.}
 
 \item{wind}{An \code{integer}. The volatility's window size to be computed.}
+
+\item{...}{arguments passed on to \link[seasonal]{seas} to compute the seasonal adjustment.}
 }
 \value{
 A \code{ts} object.
