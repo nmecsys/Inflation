@@ -13,7 +13,7 @@ core.dw(infla, sub, weights, wind = 48)
 
 \item{weights}{A \code{ts}. Corresponding weights to each subitem.}
 
-\item{wind}{An \code{integer}. The volatility's window to be computed.}
+\item{wind}{An \code{integer}. The volatility's window size to be computed.}
 }
 \value{
 A \code{ts} object.

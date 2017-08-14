@@ -3,35 +3,36 @@
 \encoding{utf8}
 \name{core.ex}
 \alias{core.ex}
-\title{Núcleo de inflação por exclusão}
+\title{Computes the core inflation using the subitem exclusion method}
 \usage{
-core.ex(sub, pesos, codigos, cortes = 4, alpha = 2)
+core.ex(sub, weights, codes, part = 4, alpha = 2)
 }
 \arguments{
-\item{sub}{Subitens em variação.}
+\item{sub}{A \code{ts}. Subitems' variation.}
 
-\item{pesos}{Pesos correspondentes a cada subitem.}
+\item{weights}{A \code{ts}. Each subitem corresponding weights. If missing, all items get the
+same weight.}
 
-\item{codigos}{Codigos dos subitens}
+\item{codes}{A \code{data.frame}. Subitem containing the codes and their descriptions.}
 
-\item{cortes}{Quantidade deseja de cortes a serem realizados na janela temporal.}
+\item{part}{An \code{integer}. Partitions' number inside the temporal window.}
 
-\item{alpha}{Nível de significância.}
+\item{alpha}{An \code{integer}. Significance level in percentage.}
 }
 \description{
-Núcleo de inflação por exclusão
+Computes the core inflation using the subitem exclusion method
 }
 \examples{
 \dontrun{
 load("~/INFLATION/data/codigos.rda")
 load("~/INFLATION/data/pesos.ts.rda")
 load("~/INFLATION/data/variacao.ts.rda")
-codigos <- codigos[2:nrow(codigos),]
+codes <- codigos[2:nrow(codigos),]
 
-ipc.ex1 <- core.ex(sub = variacao.ts$subitens, pesos = pesos.ts$subitens, codigos = codigos,
-cortes = 4, alpha = 2)
+ipc.ex1 <- core.ex(sub = variacao.ts$subitens, weights = pesos.ts$subitens, codes = codigos,
+part = 4, alpha = 2)
 
-# ex2: excluindo alimentaÃ§Ã£o
+# ex2: excluindo alimentação
 novos_pesos <- pesos.ts$subitens
 novos_pesos[,substr(colnames(novos_pesos), 5,5) == 1] <- 0
 novos_pesos <- (novos_pesos/rowSums(novos_pesos, na.rm = TRUE))*100
@@ -39,8 +40,17 @@ ipc.ex3 <- ts(rowSums(variacao.ts$subitens*novos_pesos,
 na.rm = TRUE)/100, start = start(variacao.ts$subitens), frequency = 12)
 
 
-# grÃ¡ficos
+# gráficos
 ts.plot(variacao.ts$ipc, ipc.ex1, col = c(1:2), lwd = 1:2)
-ts.plot(variacao.ts$ipc, ipc.ex3, col = c(1:2), lwd = 1:2)}
+ts.plot(variacao.ts$ipc, ipc.ex3, col = c(1:2), lwd = 1:2)
+
+ipca <- ipca_get(group = "subitem")
+# Estes códigos ainda são do IPC - mudar para IPCA
+load("~/INFLATION/data/codigos.rda")
+codigos <- codigos[1:373,]
+nuc <- core.ex(sub = ipca$ipca_ts, weights = ipca$weights_ts, codes = ipca$cod)
+
+}
 }
 \keyword{core}
+\keyword{exclusion}

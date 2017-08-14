@@ -1,10 +1,11 @@
- #' Núcleo de inflação por exclusão
-#' @param sub Subitens em variação.
-#' @param pesos Pesos correspondentes a cada subitem.
-#' @param codigos Codigos dos subitens
-#' @param cortes Quantidade deseja de cortes a serem realizados na janela temporal.
-#' @param alpha Nível de significância.
-#' @keywords core
+ #' Computes the core inflation using the subitem exclusion method
+#' @param sub A \code{ts}. Subitems' variation.
+#' @param weights A \code{ts}. Each subitem corresponding weights. If missing, all items get the
+#' same weight.
+#' @param codes A \code{data.frame}. Subitem containing the codes and their descriptions.
+#' @param part An \code{integer}. Partitions' number inside the temporal window.
+#' @param alpha An \code{integer}. Significance level in percentage.
+#' @keywords core exclusion
 #' @encoding utf8
 #' @export
 #' @examples
@@ -12,10 +13,10 @@
 #' load("~/INFLATION/data/codigos.rda")
 #' load("~/INFLATION/data/pesos.ts.rda")
 #' load("~/INFLATION/data/variacao.ts.rda")
-#' codigos <- codigos[2:nrow(codigos),]
+#' codes <- codigos[2:nrow(codigos),]
 #'
-#' ipc.ex1 <- core.ex(sub = variacao.ts$subitens, pesos = pesos.ts$subitens, codigos = codigos,
-#' cortes = 4, alpha = 2)
+#' ipc.ex1 <- core.ex(sub = variacao.ts$subitens, weights = pesos.ts$subitens, codes = codigos,
+#' part = 4, alpha = 2)
 #'
 #' # ex2: excluindo alimentação
 #' novos_pesos <- pesos.ts$subitens
@@ -27,20 +28,28 @@
 #'
 #' # gráficos
 #' ts.plot(variacao.ts$ipc, ipc.ex1, col = c(1:2), lwd = 1:2)
-#' ts.plot(variacao.ts$ipc, ipc.ex3, col = c(1:2), lwd = 1:2)}
+#' ts.plot(variacao.ts$ipc, ipc.ex3, col = c(1:2), lwd = 1:2)
+#'
+#' ipca <- ipca_get(group = "subitem")
+#' # Estes códigos ainda são do IPC - mudar para IPCA
+#' load("~/INFLATION/data/codigos.rda")
+#' codigos <- codigos[1:373,]
+#' nuc <- core.ex(sub = ipca$ipca_ts, weights = ipca$weights_ts, codes = ipca$cod)
+#'
+#' }
 
 
-core.ex <- function(sub, pesos, codigos, cortes = 4, alpha = 2){
+core.ex <- function(sub, weights, codes, part = 4, alpha = 2){
 
-    sd <- vola(x = sub, codigos, cortes, alpha)
+    sd <- vola(x = sub, codes, part, alpha)
 
     # sd: saida de vola1999 ou vola
     saem <- rownames(sd[sd$SAI1 | sd$SAI2, ])
-    pesos[,colnames(pesos) %in% saem] <- 0
-    pesos <- (pesos/rowSums(pesos, na.rm = TRUE))*100
+    weights[,colnames(weights) %in% saem] <- 0
+    weights <- (weights/rowSums(weights, na.rm = TRUE))*100
 
-    ts(rowSums(sub*pesos, na.rm = TRUE)/100, start = start(sub), frequency = 12)
+    ts(rowSums(sub*weights, na.rm = TRUE)/100, start = start(sub), frequency = 12)
 }
 
 
-# core.ex(sub=a$ipca_ts, pesos = a$pesos_ts, codigos = a$codigo)
+# core.ex(sub=a$ipca_ts, weights = a$weights_ts, codes = a$codigo)

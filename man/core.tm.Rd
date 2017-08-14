@@ -2,41 +2,41 @@
 % Please edit documentation in R/core_tm.R
 \name{core.tm}
 \alias{core.tm}
-\title{A}
+\title{Computes the trimmed mean core inflation}
 \usage{
-core.tm(sub, weights, inf = 20, sup = 20, suave = FALSE, janela = 12)
+core.tm(sub, weights, smoo, inf = 20, sup = 20, wind = 12)
 }
 \arguments{
-\item{sub}{Subitens em variação.}
+\item{sub}{A \code{ts}. Subitems' variation.}
 
-\item{inf}{Corte percentual da cauda inferior. Predefinido como 20.}
+\item{weights}{A \code{ts}. Each subitem corresponding weights. If missing, all items get the
+same weight.}
 
-\item{sup}{Corte percentual da cauda superior. Predefinido como 20.}
+\item{smoo}{A \code{vector}. List of codes to be smoothed. If missing, no item will be smoothed.}
 
-\item{suave}{Código dos itens que serão suavizados.}
+\item{inf}{An \code{integer}. Percentage lower tail cut. Predefined as 20.}
 
-\item{janela}{Tamanho da janela temporal de corte.}
+\item{sup}{An \code{integer}. Percentage upper tail cut. Predefined as 20.}
 
-\item{pesos}{Pesos correspondentes a cada subitem.}
+\item{wind}{An \code{integer}. The volatility's window size to be computed.}
+}
+\value{
+A \code{list} object. The list contains two time-series (\code{ts} objects). The computed core
+and the variables that were used to calculate the means.
 }
 \description{
-A
+Computes the trimmed mean core inflation
 }
 \examples{
 \dontrun{
+ipca <- ipca_get(group = "subitem")
+nuc <- core.tm(sub = ipca$ipca_ts, weights = ipca$weights_ts)
 
-load("~/INFLATION/data/codigos.rda")
-load("~/INFLATION/data/pesos.ts.rda")
-load("~/INFLATION/data/variacao.ts.rda")
-codigos <- codigos[2:nrow(codigos),]
-core1 <- core.tm(sub=variacao.ts$subitens, pesos = pesos.ts$subitens, inf = 20, sup = 20,
-suave = FALSE, janela = 12)
 
-# grÃ¡ficos
-ts.plot(variacao.ts$ipc, core1$core, col = c(1:2), lwd = 1:2)
 }
 }
+\keyword{average}
 \keyword{core}
-\keyword{ma}
-\keyword{média}
-\keyword{móvel}
+\keyword{mean}
+\keyword{moving}
+\keyword{trimmed}

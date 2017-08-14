@@ -5,12 +5,12 @@
 \alias{vola}
 \title{Calcula a volatilidade para núcleo por exclusão}
 \usage{
-vola(x, codigos, cortes, alpha)
+vola(x, codes, cortes, alpha)
 }
 \arguments{
 \item{x}{Subitens em variação.}
 
-\item{codigos}{Codigos dos subitens}
+\item{codes}{codes dos subitens}
 
 \item{cortes}{Quantidade deseja de cortes a serem realizados na janela temporal.}
 
