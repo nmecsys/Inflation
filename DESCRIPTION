@@ -13,6 +13,4 @@ Description: More about what it does (maybe more than one line)
 License: MIT
 Encoding: UTF-8
 LazyData: true
-Imports: Rcpp (>= 0.12.10)
-LinkingTo: Rcpp
 RoxygenNote: 6.0.1
