@@ -20,7 +20,7 @@
 #' }
 
 
-core.tf <- function(sub, weights, smoo, inf = 20, sup = 20, wind = 12, ...){
+INFL.core_tf <- function(sub, weights, smoo, inf = 20, sup = 20, wind = 12, ...){
 
     ff <- core.tm(sub, weights, smoo, inf = 20, sup = 20, wind = 12)
 

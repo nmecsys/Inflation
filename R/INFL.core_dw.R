@@ -18,7 +18,7 @@
 #'
 #' }
 
-core.dw <- function(infla, sub, weights, wind = 48){
+INFL.core_dw <- function(infla, sub, weights, wind = 48){
 
 
     # browser()

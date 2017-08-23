@@ -1,4 +1,4 @@
-## -- EXEMPLE 1
+## -- EXAMPLE 1
 
 # Once the package is built, file path is not needed
 load(paste0(getwd(),"/data/codigos.rda"))
@@ -9,11 +9,11 @@ load(paste0(getwd(),"/data/variacao.ts.rda"))
 codes <- codigos[2:nrow(codigos),]
 
 # Call INFL.core_ex
-ipc.ex1 <- core.ex(sub = variacao.ts$subitens,
-                   weights = pesos.ts$subitens,
-                   codes = codes,
-                   part = 4,
-                   alpha = 2)
+ipc.ex1 <- INFL.core_ex(subitems = variacao.ts$subitens,
+                        weights = pesos.ts$subitens,
+                        info = codes,
+                        n.blocks = 4,
+                        alpha = 2)
 
 
 
