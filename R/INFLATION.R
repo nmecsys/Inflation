@@ -6,7 +6,7 @@
 #' The package provides a set of functions that compute the core inflation based on items that are part of
 #' an inflation index. Currently, the package allows for four different core inflation computations
 #' methods: trimmed means, exclusion, double weighting and triple filter. The first three are well known by the
-#' public. The latter is a method we developped that we believe is better as measure.
+#' public. The latter is a method we developed that we believe is a better measure.
 #'
 #'
 #'
@@ -17,8 +17,9 @@
 #'
 #'
 #' @author Pedro Costa Ferreira \email{pedro.guilherme@fgv.br},
-#'         Talitha Speranza \email{talitha.speranza@fgv.br}
-#'         Fernando Teixeira \email{fernando.teixeira@fgv.br}
+#'         Talitha Speranza \email{talitha.speranza@fgv.br},
+#'         Fernando Teixeira \email{fernando.teixeira@fgv.br},
+#'         Daiane Marcolino \email{daiane.mattos@fgv.br}
 #'
 #'
 #' @docType package

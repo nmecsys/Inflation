@@ -1,4 +1,5 @@
 #' @title Computes the double weighting core inflation
+#'
 #' @param infla A \code{ts} object. The inflation index (variation).
 #' @param sub A \code{ts}. Subitems' variation.
 #' @param weights A \code{ts}. Corresponding weights to each subitem.
