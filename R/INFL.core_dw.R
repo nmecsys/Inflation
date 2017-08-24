@@ -1,30 +1,21 @@
 #' @title Computes the double weighting core inflation
 #'
-#' @param infla A \code{ts} object. The inflation index (variation).
-#' @param sub A \code{ts}. Subitems' variation.
-#' @param weights A \code{ts}. Corresponding weights to each subitem.
+#' @param infl.var A \code{ts} object. The inflation index variation.
+#' @param subit.var A \code{ts}. Subitems' variation.
+#' @param weights A \code{ts}. Weights corresponding to each subitem.
 #' @param wind An \code{integer}. The volatility's window size to be computed.
 #'
 #' @return A \code{ts} object.
 #' @keywords core weight
 #' @export
-#' @examples
-#' \dontrun{
-#'  ipca <- ipca_get(group = "subitem")
-#'  nuc <- core.dw(ipca$ipca_index, ipca$ipca_ts, ipca$weights_ts, wind = 12)
-#'
-#'  ipca <- ipca_get(group = "item")
-#'  nuc <- core.dw(ipca$ipca_index, ipca$ipca_ts, ipca$weights_ts, wind = 24)
-#'
-#' }
 
-INFL.core_dw <- function(infla, sub, weights, wind = 48){
+INFL.core_dw <- function(infl.var, subit.var, weights, wind = 48){
 
 
     # browser()
     pesos <- weights
-    pi_rel <- sub - infla
-    colnames(pi_rel) <- colnames(sub)
+    pi_rel <- subit.var - infl.var
+    colnames(pi_rel) <- colnames(subit.var)
 
     data <- as.Date(paste0(start(pi_rel)[1], "-", start(pi_rel)[2],"-01"))
     data <- seq(data, by = "1 month", length.out = nrow(pi_rel))
@@ -52,4 +43,3 @@ INFL.core_dw <- function(infla, sub, weights, wind = 48){
 }
 
 
-# core.dw(infla = a$ipca_agrupado, sub = a$ipca_ts, weights = a$pesos_ts)
