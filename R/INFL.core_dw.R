@@ -1,4 +1,4 @@
-#' @title Computes the double weighting core inflation
+#' @title Computes the double weighted core inflation
 #'
 #' @param infl.var A \code{ts} object. The inflation index variation.
 #' @param subits.var A \code{ts}. Subitems' variation.
@@ -20,7 +20,7 @@ INFL.core_dw <- function(infl.var, subits.var, weights, wind = 48){
     # Create a sequence of all the dates
     data <- seq(data, by = "1 month", length.out = nrow(dif))
 
-    # Create an empty vector of size = length(subits.var)
+    # Create an empty matrix of dim = dim(subits.var)
     db.weights <- subits.var*0
 
     # Loop over moving windows
