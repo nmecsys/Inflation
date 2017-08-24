@@ -5,45 +5,27 @@
 #' @param inf An \code{integer}. Percentage lower tail cut. Predefined as 20.
 #' @param sup An \code{integer}. Percentage upper tail cut. Predefined as 20.
 #' @param smoo A \code{vector}. List of codes to be smoothed. If missing, no item will be smoothed.
-#' @param wind An \code{integer}. The volatility's window size to be computed.
+#' @param wind An \code{integer}. The volatility's window size.
 #'
 #' @return A \code{list} object. The list contains two time-series (\code{ts} objects). The computed core
 #' and the variables that were used to calculate the means.
+#'
 #' @keywords core trimmed mean average moving
 #' @export
-#' @examples
-#' \dontrun{
-#' ipca <- ipca_get(group = "subitem")
-#' nuc <- core.tm(sub = ipca$ipca_ts, weights = ipca$weights_ts)
-#'
-#'
-#' }
 
-core.tm <- function(sub, weights, smoo, inf = 20, sup = 20, wind = 12){
+core.tm <- function(subits.var, weights, smoo, inf = 20, sup = 20, wind = 12){
 
-    # browser()
-    # sub = variacao.ts$subitens
-    # weights = weights.ts$subitens
-    # inf = 20
-    # sup = 13
-    # wind = 12
-    # adm = T
-
-    # sub: subitens (variação)
-    # weights: weights dos subitens
-    # sup e inf: corte percentual das caudas inferior e superior
-
-    if (missing(sub)){
+    if (missing(subits.var)){
         stop("Specify the subitems to be used in computations.")
     }
 
     if (missing(weights)){
 
-        weights <- sub
-        peso <- 100/length(sub[,1])
+        weights <- subits.var
+        peso <- 100/length(subits.var[,1])
         weights <- sapply(weights, FUN = function(x){peso})
-        weights <- matrix(peso, nrow = dim(sub)[1], ncol = dim(sub)[2])
-        colnames(weights) <- colnames(sub)
+        weights <- matrix(peso, nrow = dim(subits.var)[1], ncol = dim(subits.var)[2])
+        colnames(weights) <- colnames(subits.var)
 
     }
 
@@ -58,7 +40,7 @@ core.tm <- function(sub, weights, smoo, inf = 20, sup = 20, wind = 12){
         # itens que serão suavizados
         codigos_smoo <- smoo
         codigos_smoo <- paste0("cod_",codigos_smoo)
-        filtro_smoo <- sub[,colnames(sub) %in% codigos_smoo]
+        filtro_smoo <- subits.var[,colnames(subits.var) %in% codigos_smoo]
         filtro_smoo <- (filtro_smoo/100 + 1)^(1/wind)
         filtro_smoo2 <- filtro_smoo
 
@@ -72,18 +54,18 @@ core.tm <- function(sub, weights, smoo, inf = 20, sup = 20, wind = 12){
 
 
         filtro_smoo2 <- (filtro_smoo2-1)*100
-        sub[,colnames(sub) %in% codigos_smoo] <- filtro_smoo2
+        subits.var[,colnames(subits.var) %in% codigos_smoo] <- filtro_smoo2
     }
 
 
-    entrou <- sub*NA
+    entrou <- subits.var*NA
     entrou_vari <- NULL
 
-    for(i in 1:nrow(sub)){
+    for(i in 1:nrow(subits.var)){
 
 
 
-        dados <- data.frame(x = sub[i,], weights = weights[i,])
+        dados <- data.frame(x = subits.var[i,], weights = weights[i,])
         dados <- dados[order(dados$x),]
         dados$weights_acum <- cumsum(dados$weights)
         pos_inf <- min(which(dados$weights_acum > inf))
@@ -134,10 +116,8 @@ core.tm <- function(sub, weights, smoo, inf = 20, sup = 20, wind = 12){
 
     weights_novos2 <- weights_novos/rowSums(weights_novos,na.rm = T)*100
 
-    core <- ts(rowSums(weights_novos2*sub, na.rm = T)/100, start = start(sub), frequency = 12)
+    core <- ts(rowSums(weights_novos2*subits.var, na.rm = T)/100, start = start(subits.var), frequency = 12)
 
     return(invisible(list(core = core, var_in = entrou)))
 }
 
-
-# core_ma <- core.tm(sub = a$ipca_ts, weights = a$weights_ts)

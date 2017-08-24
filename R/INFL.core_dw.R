@@ -3,7 +3,7 @@
 #' @param infl.var A \code{ts} object. The inflation index variation.
 #' @param subits.var A \code{ts}. Subitems' variation.
 #' @param weights A \code{ts}. Weights corresponding to each subitem.
-#' @param wind An \code{integer}. The volatility's window size to be computed.
+#' @param wind An \code{integer}. The volatility's window size.
 #'
 #' @return A \code{ts} object.
 #' @keywords core weight
