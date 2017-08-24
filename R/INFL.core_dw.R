@@ -11,7 +11,6 @@
 
 INFL.core_dw <- function(infl.var, subits.var, weights, wind = 48){
 
-
     # Build a matrix of the differences between subitems variation and total variation
     dif <- subits.var - infl.var
     colnames(dif) <- colnames(subits.var)
