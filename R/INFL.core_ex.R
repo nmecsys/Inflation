@@ -1,18 +1,18 @@
  #' Computes the core inflation using the subitem exclusion method
  #'
-#' @param subitems A \code{ts}. Subitems' variation.
+#' @param subits.var A \code{ts}. Inflation subitems' variation.
 #' @param weights A \code{ts}. Each subitem corresponding weights. If missing, all items get the same weight.
 #' @param info A \code{data.frame}. Subitem metadata table containing their codes and descriptions.
-#' @param part An \code{integer}. Partitions' number inside the temporal window.
+#' @param n.blocks An \code{integer}. Partitions' number inside the temporal window.
 #' @param alpha An \code{integer}. Significance level in percentage.
 #' @keywords core exclusion
 #' @encoding utf8
 #' @export
 
-INFL.core_ex <- function(subitems, weights, info, n.blocks = 4, alpha = 2){
+INFL.core_ex <- function(subits.var, weights, info, n.blocks = 4, alpha = 2){
 
     # Compute the volatility matrix
-    vol.m <- vol.mat(subitems, info, n.blocks, alpha)
+    vol.m <- vol.mat(subits.var, info, n.blocks, alpha)
 
     # Get the codes of the items that must be removed
     to.rm <- rownames(vol.m[vol.m$SAI1 | vol.m$SAI2, ])
@@ -23,7 +23,7 @@ INFL.core_ex <- function(subitems, weights, info, n.blocks = 4, alpha = 2){
     # Weights are rebalanced
     weights <- (weights/rowSums(weights, na.rm = TRUE))*100
 
-    # Subitems variation is multiplied by their weights
-    ts(rowSums(subitems*weights, na.rm = TRUE)/100, start = start(subitems), frequency = 12)
+    # subits.var variation is multiplied by their weights
+    ts(rowSums(subits.var*weights, na.rm = TRUE)/100, start = start(subits.var), frequency = 12)
 }
 
