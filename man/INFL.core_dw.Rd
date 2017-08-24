@@ -4,29 +4,19 @@
 \alias{INFL.core_dw}
 \title{Computes the double weighting core inflation}
 \usage{
-INFL.core_dw(infla, sub, weights, wind = 48)
+INFL.core_dw(infl.var, subits.var, weights, wind = 48)
 }
 \arguments{
-\item{infla}{A \code{ts} object. The inflation index (variation).}
+\item{infl.var}{A \code{ts} object. The inflation index variation.}
 
-\item{sub}{A \code{ts}. Subitems' variation.}
+\item{subits.var}{A \code{ts}. Subitems' variation.}
 
-\item{weights}{A \code{ts}. Corresponding weights to each subitem.}
+\item{weights}{A \code{ts}. Weights corresponding to each subitem.}
 
 \item{wind}{An \code{integer}. The volatility's window size to be computed.}
 }
 \value{
 A \code{ts} object.
-}
-\examples{
-\dontrun{
- ipca <- ipca_get(group = "subitem")
- nuc <- core.dw(ipca$ipca_index, ipca$ipca_ts, ipca$weights_ts, wind = 12)
-
- ipca <- ipca_get(group = "item")
- nuc <- core.dw(ipca$ipca_index, ipca$ipca_ts, ipca$weights_ts, wind = 24)
-
-}
 }
 \keyword{core}
 \keyword{weight}
