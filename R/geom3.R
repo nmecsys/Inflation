@@ -12,6 +12,6 @@ geom3 <- function(x, anual = F){
     data[,"w"] <- data[,"w"]^(1/3)
     if(anual){data[,"w"] <- data[,"w"]^12}
     data$z <- (data$w - 1)*100
-    st <- ts(data$z, start = start(x), end = end(x), freq = 12)
+    st <- ts(data$z, start = start(x), end = end(x), frequency = 12)
     st
 }

@@ -10,7 +10,9 @@ Authors@R: c(person("Pedro", "Costa Ferreira", email = "pedro.guilherme@fgv.br",
 Maintainer: Pedro Costa Ferreira <pedro.guilherme@fgv.br>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: MIT
+Depends:
+    R (>= 3.3.1)
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1

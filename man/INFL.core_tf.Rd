@@ -4,7 +4,8 @@
 \alias{INFL.core_tf}
 \title{Computes the triple filter core inflation}
 \usage{
-INFL.core_tf(sub, weights, smoo, inf = 20, sup = 20, wind = 12, ...)
+INFL.core_tf(sub, weights, smoo, inf = 20, sup = 20, wind = 12,
+  x11 = NULL, ...)
 }
 \arguments{
 \item{sub}{A \code{ts}. Subitems' variation.}
@@ -20,6 +21,8 @@ same weight.}
 
 \item{wind}{An \code{integer}. The volatility's window size to be computed.}
 
+\item{x11}{A \code{string}. If an empty string is passed as argument, the seasonal adjustment uses x11 methodology.}
+
 \item{...}{arguments passed on to \link[seasonal]{seas} to compute the seasonal adjustment.}
 }
 \value{
@@ -31,7 +34,7 @@ Computes the triple filter core inflation
 \examples{
 \dontrun{
 ipca <- ipca_get(group = "subitem")
-core.tf(sub=ipca$ipca_ts, weights = weights_ts)
+INFL.core_tf(sub=ipca$ipca_ts, weights = ipca$weights_ts)
 
 
 }

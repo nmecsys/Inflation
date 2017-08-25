@@ -5,18 +5,18 @@
 \alias{INFL.core_ex}
 \title{Computes the core inflation using the subitem exclusion method}
 \usage{
-INFL.core_ex(subitems, weights, info, n.blocks = 4, alpha = 2)
+INFL.core_ex(subits.var, weights, info, n.blocks = 4, alpha = 2)
 }
 \arguments{
-\item{subitems}{A \code{ts}. Subitems' variation.}
+\item{subits.var}{A \code{ts}. Inflation subitems' variation.}
 
 \item{weights}{A \code{ts}. Each subitem corresponding weights. If missing, all items get the same weight.}
 
 \item{info}{A \code{data.frame}. Subitem metadata table containing their codes and descriptions.}
 
-\item{alpha}{An \code{integer}. Significance level in percentage.}
+\item{n.blocks}{An \code{integer}. Partitions' number inside the temporal window.}
 
-\item{part}{An \code{integer}. Partitions' number inside the temporal window.}
+\item{alpha}{An \code{integer}. Significance level in percentage.}
 }
 \description{
 Computes the core inflation using the subitem exclusion method

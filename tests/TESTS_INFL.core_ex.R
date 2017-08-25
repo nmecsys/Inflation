@@ -39,7 +39,7 @@ ipca <- ipca_get(group = "subitem")
 load(paste0(getwd(),"/data/codigos.rda"))
 
 #' codigos <- codigos[1:373,]
-nuc <- INFL.core_ex(subitems = ipca$ipca_ts,
+nuc <- INFL.core_ex(subits.var = ipca$ipca_ts,
                     weights = ipca$weights_ts,
                     info = ipca$cod)
 

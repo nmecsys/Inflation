@@ -2,9 +2,9 @@
 % Please edit documentation in R/INFL.core_dw.R
 \name{INFL.core_dw}
 \alias{INFL.core_dw}
-\title{Computes the double weighting core inflation}
+\title{Computes the double weighted core inflation}
 \usage{
-INFL.core_dw(infl.var, subits.var, weights, wind = 48)
+INFL.core_dw(infl.var, subits.var, weights, wind = 12)
 }
 \arguments{
 \item{infl.var}{A \code{ts} object. The inflation index variation.}
@@ -13,10 +13,13 @@ INFL.core_dw(infl.var, subits.var, weights, wind = 48)
 
 \item{weights}{A \code{ts}. Weights corresponding to each subitem.}
 
-\item{wind}{An \code{integer}. The volatility's window size to be computed.}
+\item{wind}{An \code{integer}. The volatility's window size.}
 }
 \value{
 A \code{ts} object.
+}
+\description{
+Computes the double weighted core inflation
 }
 \keyword{core}
 \keyword{weight}

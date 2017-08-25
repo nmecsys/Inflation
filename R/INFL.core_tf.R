@@ -6,6 +6,7 @@
 #' @param sup An \code{integer}. Percentage upper tail cut. Predefined as 20.
 #' @param smoo A \code{vector}. List of codes to be smoothed. If missing, no item will be smoothed.
 #' @param wind An \code{integer}. The volatility's window size to be computed.
+#' @param x11 A \code{string}. If an empty string is passed as argument, the seasonal adjustment uses x11 methodology.
 #' @param ... arguments passed on to \link[seasonal]{seas} to compute the seasonal adjustment.
 #'
 #' @return A \code{ts} object.
@@ -14,21 +15,23 @@
 #' @examples
 #' \dontrun{
 #' ipca <- ipca_get(group = "subitem")
-#' core.tf(sub=ipca$ipca_ts, weights = weights_ts)
+#' INFL.core_tf(sub=ipca$ipca_ts, weights = ipca$weights_ts)
 #'
 #'
 #' }
 
 
-INFL.core_tf <- function(sub, weights, smoo, inf = 20, sup = 20, wind = 12, ...){
+INFL.core_tf <- function(sub, weights, smoo, inf = 20, sup = 20, wind = 12, x11 = NULL, ...){
 
-    ff <- core.tm(sub, weights, smoo, inf = 20, sup = 20, wind = 12)
+   ff <- core.tm(subits.var = sub, weights, smoo, inf = 20, sup = 20, wind = 12)
 
-    sf <- seasonal::seas(ff$core, ...)
 
-    if(missing(x11)){
+    if(is.null(x11)){
+        sf <- seasonal::seas(ff$core, ...)
         sf_2 <- sf$series$s11
-    } else {sf_2 <- sf$series$d11}
+    } else if (x11 == "") {sf <- seasonal::seas(ff$core, x11 == "", ...);
+                           sf_2 <- sf$series$d11}
+
     tf <- geom3(sf_2)
 
 

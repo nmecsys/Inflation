@@ -1,6 +1,6 @@
 #' Computes the trimmed means core inflation
 #'
-#' @param sub A \code{ts}. Subitems' variation.
+#' @param subits.var A \code{ts}. Subitems' variation.
 #' @param weights A \code{ts}. Each subitem corresponding weights. If missing, all items get thevsame weight.
 #' @param inf An \code{integer}. Percentage lower tail cut. Predefined as 20.
 #' @param sup An \code{integer}. Percentage upper tail cut. Predefined as 20.

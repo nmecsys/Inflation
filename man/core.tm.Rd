@@ -2,15 +2,14 @@
 % Please edit documentation in R/INFL.core_tm.R
 \name{core.tm}
 \alias{core.tm}
-\title{Computes the trimmed mean core inflation}
+\title{Computes the trimmed means core inflation}
 \usage{
-core.tm(sub, weights, smoo, inf = 20, sup = 20, wind = 12)
+core.tm(subits.var, weights, smoo, inf = 20, sup = 20, wind = 12)
 }
 \arguments{
-\item{sub}{A \code{ts}. Subitems' variation.}
+\item{subits.var}{A \code{ts}. Subitems' variation.}
 
-\item{weights}{A \code{ts}. Each subitem corresponding weights. If missing, all items get the
-same weight.}
+\item{weights}{A \code{ts}. Each subitem corresponding weights. If missing, all items get thevsame weight.}
 
 \item{smoo}{A \code{vector}. List of codes to be smoothed. If missing, no item will be smoothed.}
 
@@ -18,22 +17,14 @@ same weight.}
 
 \item{sup}{An \code{integer}. Percentage upper tail cut. Predefined as 20.}
 
-\item{wind}{An \code{integer}. The volatility's window size to be computed.}
+\item{wind}{An \code{integer}. The volatility's window size.}
 }
 \value{
 A \code{list} object. The list contains two time-series (\code{ts} objects). The computed core
 and the variables that were used to calculate the means.
 }
 \description{
-Computes the trimmed mean core inflation
-}
-\examples{
-\dontrun{
-ipca <- ipca_get(group = "subitem")
-nuc <- core.tm(sub = ipca$ipca_ts, weights = ipca$weights_ts)
-
-
-}
+Computes the trimmed means core inflation
 }
 \keyword{average}
 \keyword{core}

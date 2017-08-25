@@ -1,4 +1,4 @@
-#' @title Computes the double weighted core inflation
+#' Computes the double weighted core inflation
 #'
 #' @param infl.var A \code{ts} object. The inflation index variation.
 #' @param subits.var A \code{ts}. Subitems' variation.
@@ -9,7 +9,7 @@
 #' @keywords core weight
 #' @export
 
-INFL.core_dw <- function(infl.var, subits.var, weights, wind = 48){
+INFL.core_dw <- function(infl.var, subits.var, weights, wind = 12){
 
     # Build a matrix of the differences between subitems variation and total variation
     dif <- subits.var - infl.var
