@@ -8,7 +8,7 @@ Authors@R: c(person("Pedro", "Costa Ferreira", email = "pedro.guilherme@fgv.br",
               person("Talitha", "Speranza", email = "talitha.speranza@fgv.br", role = "aut"),
 			        person("Fernando", "Teixeira", email = "fernando.teixeira@fgv.br", role = "aut"))
 Maintainer: Pedro Costa Ferreira <pedro.guilherme@fgv.br>
-Description: INFLATION provides access to core inflation functions. Four different core inflation 
+Description: This package provides access to core inflation functions. Four different core inflation 
     functions are provided. The well known trimmed means, exclusion and double weighing methods, 
     alongside the new Triple Filter method <http://portal.fgv.br/>.
 Depends:
@@ -19,9 +19,10 @@ LazyData: true
 RoxygenNote: 6.0.1
 Imports: seasonal
 Author: Pedro Costa Ferreira [aut, cre],
+  Daiane Marcolino [aut],
   Talitha Speranza [aut],
-  Fernando Teixeira [aut],
-  Daiane Marcolino [aut]
+  Fernando Teixeira [aut]
+  
 NeedsCompilation: no
 BugReports: https://github.com/fernote7/INFLATION/issues
 URL: https://github.com/fernote7/INFLATION
