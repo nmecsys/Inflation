@@ -1,7 +1,7 @@
 #' Computes the trimmed means core inflation
 #'
 #' @param subits.var A \code{ts}. Subitems' variation.
-#' @param weights A \code{ts}. Each subitem corresponding weights. If missing, all items get thevsame weight.
+#' @param weights A \code{ts}. Each subitem corresponding weights. If missing, all items get the same weight.
 #' @param inf An \code{integer}. Percentage lower tail cut. Predefined as 20.
 #' @param sup An \code{integer}. Percentage upper tail cut. Predefined as 20.
 #' @param smoo A \code{vector}. List of codes to be smoothed. If missing, no item will be smoothed.
@@ -19,104 +19,105 @@ core.tm <- function(subits.var, weights, smoo, inf = 20, sup = 20, wind = 12){
         stop("Specify the subitems to be used in computations.")
     }
 
+
+    # If weights are not provided, set all weights to
+    # 100 / (number of subitems), so that their sum is 100
     if (missing(weights)){
-
-        weights <- subits.var
-        peso <- 100/length(subits.var[,1])
-        weights <- sapply(weights, FUN = function(x){peso})
-        weights <- matrix(peso, nrow = dim(subits.var)[1], ncol = dim(subits.var)[2])
-        colnames(weights) <- colnames(subits.var)
-
+        w <- matrix(100/ncol(subits.var), nrow = dim(subits.var)[1], ncol = dim(subits.var)[2])
+        colnames(w) <- colnames(subits.var)
     }
 
-    weights_novos <- weights*0
-
-    # browser()
+    # Create a dim(weights) matrix
+    new.weights <- weights*0
 
     if(!missing(smoo)){
 
-        # browser()
+        # Get items to be smoothed
+        smoo <- paste0("cod_",smoo)
+        subits.smoo <- subits.var[,colnames(subits.var) %in% smoo]
 
-        # itens que serão suavizados
-        codigos_smoo <- smoo
-        codigos_smoo <- paste0("cod_",codigos_smoo)
-        filtro_smoo <- subits.var[,colnames(subits.var) %in% codigos_smoo]
-        filtro_smoo <- (filtro_smoo/100 + 1)^(1/wind)
-        filtro_smoo2 <- filtro_smoo
+        # Transform percentages in multipliers
+        # Take 'wind'th root of these multipliers
+        subits.smoo <- (subits.smoo/100 + 1)^(1/wind)
 
-
-        # processo de suavização
-        for(i in wind:nrow(filtro_smoo)){
-            v <- apply(filtro_smoo[(i-wind+1):i,], MARGIN = 2, FUN = prod)
-            masc_v <- !is.na(v)
-            filtro_smoo2[i,masc_v] <- v[masc_v]
+        # Smoothing process
+        # At each step, move the 'wind'-sized window and multiply elements in it
+        filt <- subits.smoo
+        for(i in wind:nrow(subits.smoo)){
+            mults <- apply(subits.smoo[(i-wind+1):i,], MARGIN = 2, FUN = prod)
+            masc <- !is.na(mults)
+            filt[i,masc] <- mults[masc]
         }
 
+        # Transform multipliers back in percentages
+        filt <- (filt-1)*100
 
-        filtro_smoo2 <- (filtro_smoo2-1)*100
-        subits.var[,colnames(subits.var) %in% codigos_smoo] <- filtro_smoo2
+        # Replace series for its smoothed values
+        subits.var[,colnames(subits.var) %in% smoo] <- filt
     }
 
-
+    # Create a dim(subits.var) mts
     entrou <- subits.var*NA
     entrou_vari <- NULL
 
     for(i in 1:nrow(subits.var)){
 
+        data <- data.frame(x = subits.var[i,], weights = weights[i,])
+        # Order values by variation
+        data <- data[order(data$x),]
+        # Compute the cumulative sums of the weights
+        data$cum.weights <- cumsum(data$weights)
 
+        # Calculate the position of the item before which elements must be removed
+        pos.inf <- min(which(data$cum.weights > inf))
+        # Calculate the position of the item after which elments must be removed
+        pos.sup <- min(which(data$cum.weights > 100-sup))
 
-        dados <- data.frame(x = subits.var[i,], weights = weights[i,])
-        dados <- dados[order(dados$x),]
-        dados$weights_acum <- cumsum(dados$weights)
-        pos_inf <- min(which(dados$weights_acum > inf))
-        pos_sup <- min(which(dados$weights_acum > 100-sup))
+        dados_aux1 <- data[1:(pos.inf-1),]
+        dados_aux3 <- data[(pos.inf+1):(pos.sup-1),]
+        dados_aux5 <- data[(pos.sup+1):nrow(data),]
 
-        dados_aux1 <- dados[1:(pos_inf-1),]
-        dados_aux3 <- dados[(pos_inf+1):(pos_sup-1),]
-        dados_aux5 <- dados[(pos_sup+1):nrow(dados),]
+        peso_sai_inf <- inf - data[pos.inf - 1, "cum.weights"]
+        peso_entra_inf <- data[pos.inf, "cum.weights"] - inf
+        peso_entra_sup <- (100-sup) - data[pos.sup-1, "cum.weights"]
+        peso_sai_sup <- data[pos.sup, "cum.weights"] - (100-sup)
 
-        peso_sai_inf <- inf - dados[pos_inf-1, "weights_acum"]
-        peso_entra_inf <- dados[pos_inf, "weights_acum"] - inf
-        peso_entra_sup <- (100-sup) - dados[pos_sup-1, "weights_acum"]
-        peso_sai_sup <- dados[pos_sup, "weights_acum"] - (100-sup)
-
-        dados_aux2 <- rbind(dados[pos_inf,],dados[pos_inf,])
-        dados_aux4 <- rbind(dados[pos_inf,],dados[pos_inf,])
+        dados_aux2 <- rbind(data[pos.inf,],data[pos.inf,])
+        dados_aux4 <- rbind(data[pos.sup,],data[pos.sup,])
 
         dados_aux2$weights <- c(peso_sai_inf, peso_entra_inf)
         dados_aux4$weights <- c(peso_entra_sup, peso_sai_sup)
 
-        rownames(dados_aux2) <-  c(paste0(rownames(dados[pos_inf,]),"_sai"),
-                                   rownames(dados[pos_inf,]))
+        rownames(dados_aux2) <-  c(paste0(rownames(data[pos.inf,]),"_sai"),
+                                   rownames(data[pos.inf,]))
 
-        rownames(dados_aux4) <-  c(rownames(dados[pos_sup,]),
-                                   paste0(rownames(dados[pos_sup,]),"_sai"))
+        rownames(dados_aux4) <-  c(rownames(data[pos.sup,]),
+                                   paste0(rownames(data[pos.sup,]),"_sai"))
 
         dados_aux <- rbind(dados_aux1, dados_aux2,
                            dados_aux3, dados_aux4, dados_aux5)
-        dados_aux$weights_acum <- cumsum(dados_aux$weights)
+        dados_aux$cum.weights <- cumsum(dados_aux$weights)
         dados_aux$conta <- 0
 
-        # browser()
 
         dados_aux <- dados_aux[!is.na(dados_aux$x),]
 
-        dados_aux[dados_aux$weights_acum > inf &
-                      dados_aux$weights_acum < 100 - sup |
-                      dados_aux$weights_acum == as.character(100 - sup), "conta"] <- 1
+        dados_aux[dados_aux$cum.weights > inf &
+                      dados_aux$cum.weights < 100 - sup |
+                      dados_aux$cum.weights == as.character(100 - sup), "conta"] <- 1
 
         entrou_vari <- subset(dados_aux, subset = dados_aux$conta == 1)
         entrou[i,rownames(entrou_vari)] <- t(entrou_vari$x)
 
         for(j in rownames(subset(dados_aux, dados_aux$conta == 1))){
-            weights_novos[i,j] <- dados_aux[j,"weights"]
+            new.weights[i,j] <- dados_aux[j,"weights"]
         }
 
     }
 
-    weights_novos2 <- weights_novos/rowSums(weights_novos,na.rm = T)*100
+    new.weights2 <- new.weights/rowSums(new.weights,na.rm = T)*100
 
-    core <- ts(rowSums(weights_novos2*subits.var, na.rm = T)/100, start = start(subits.var), frequency = 12)
+    core <- ts(rowSums(new.weights2*subits.var, na.rm = T)/100, start = start(subits.var), frequency = 12)
 
     return(invisible(list(core = core, var_in = entrou)))
 }
