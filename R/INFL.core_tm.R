@@ -13,7 +13,7 @@
 #' @keywords core trimmed mean average moving
 #' @export
 
-core.tm <- function(subits.var, weights, smoo, inf = 20, sup = 20, wind = 12){
+INFL.core_tm <- function(subits.var, weights, smoo, inf = 20, sup = 20, wind = 12){
 
     if (missing(subits.var)){
         stop("Specify the subitems to be used in computations.")

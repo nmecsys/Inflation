@@ -30,7 +30,7 @@ INFL.core_tf <- function(subits.var, weights, smoo, inf = 20, sup = 20, wind = 1
     if(is.null(x11)){
         s.obj <- seasonal::seas(tm$core, ...)
         ds.core <- s.obj$series$s11
-    } else if (x11 == "") {s.obj <- seasonal::seas(ff$core, x11 == "", ...);
+    } else if (x11 == "") {s.obj <- seasonal::seas(tm$core, x11 == "", ...);
                            ds.core <- s.obj$series$d11}
 
     core <- geom3(ds.core)

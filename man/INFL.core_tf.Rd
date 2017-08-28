@@ -4,11 +4,11 @@
 \alias{INFL.core_tf}
 \title{Computes the triple filter core inflation}
 \usage{
-INFL.core_tf(sub, weights, smoo, inf = 20, sup = 20, wind = 12,
+INFL.core_tf(subits.var, weights, smoo, inf = 20, sup = 20, wind = 12,
   x11 = NULL, ...)
 }
 \arguments{
-\item{sub}{A \code{ts}. Subitems' variation.}
+\item{subits.var}{A \code{ts}. Subitems' variation.}
 
 \item{weights}{A \code{ts}. Each subitem corresponding weights. If missing, all items get the
 same weight.}
@@ -34,7 +34,7 @@ Computes the triple filter core inflation
 \examples{
 \dontrun{
 ipca <- ipca_get(group = "subitem")
-INFL.core_tf(sub=ipca$ipca_ts, weights = ipca$weights_ts)
+INFL.core_tf(subits.var=ipca$ipca_ts, weights = ipca$weights_ts)
 
 
 }

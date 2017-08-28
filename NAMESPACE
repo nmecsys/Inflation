@@ -3,7 +3,7 @@
 export(INFL.core_dw)
 export(INFL.core_ex)
 export(INFL.core_tf)
-export(core.tm)
+export(INFL.core_tm)
 importFrom(stats,end)
 importFrom(stats,is.mts)
 importFrom(stats,na.omit)
