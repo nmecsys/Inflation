@@ -1,5 +1,5 @@
 #' Computes the triple filter core inflation
-#' @param sub A \code{ts}. Subitems' variation.
+#' @param subits.var A \code{ts}. Subitems' variation.
 #' @param weights A \code{ts}. Each subitem corresponding weights. If missing, all items get the
 #' same weight.
 #' @param inf An \code{integer}. Percentage lower tail cut. Predefined as 20.
@@ -15,27 +15,26 @@
 #' @examples
 #' \dontrun{
 #' ipca <- ipca_get(group = "subitem")
-#' INFL.core_tf(sub=ipca$ipca_ts, weights = ipca$weights_ts)
+#' INFL.core_tf(subits.var=ipca$ipca_ts, weights = ipca$weights_ts)
 #'
 #'
 #' }
 
 
-INFL.core_tf <- function(sub, weights, smoo, inf = 20, sup = 20, wind = 12, x11 = NULL, ...){
+INFL.core_tf <- function(subits.var, weights, smoo, inf = 20, sup = 20, wind = 12, x11 = NULL, ...){
 
-   ff <- core.tm(subits.var = sub, weights, smoo, inf = 20, sup = 20, wind = 12)
+   # Compute trimmed mean core
+   tm <- INFL.core_tm(subits.var, weights, smoo, inf, sup, wind)
 
 
     if(is.null(x11)){
-        sf <- seasonal::seas(ff$core, ...)
-        sf_2 <- sf$series$s11
-    } else if (x11 == "") {sf <- seasonal::seas(ff$core, x11 == "", ...);
-                           sf_2 <- sf$series$d11}
+        s.obj <- seasonal::seas(tm$core, ...)
+        ds.core <- s.obj$series$s11
+    } else if (x11 == "") {s.obj <- seasonal::seas(ff$core, x11 == "", ...);
+                           ds.core <- s.obj$series$d11}
 
-    tf <- geom3(sf_2)
-
-
-    return(tf)
+    core <- geom3(ds.core)
+    return(core)
 }
 
 

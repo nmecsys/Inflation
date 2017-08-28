@@ -19,7 +19,6 @@ core.tm <- function(subits.var, weights, smoo, inf = 20, sup = 20, wind = 12){
         stop("Specify the subitems to be used in computations.")
     }
 
-
     # If weights are not provided, set all weights to
     # 100 / (number of subitems), so that their sum is 100
     if (missing(weights)){
@@ -57,8 +56,7 @@ core.tm <- function(subits.var, weights, smoo, inf = 20, sup = 20, wind = 12){
     }
 
     # Create a dim(subits.var) mts
-    entrou <- subits.var*NA
-    entrou_vari <- NULL
+    chosen <- subits.var*NA
 
     for(i in 1:nrow(subits.var)){
 
@@ -73,52 +71,54 @@ core.tm <- function(subits.var, weights, smoo, inf = 20, sup = 20, wind = 12){
         # Calculate the position of the item after which elments must be removed
         pos.sup <- min(which(data$cum.weights > 100-sup))
 
-        dados_aux1 <- data[1:(pos.inf-1),]
-        dados_aux3 <- data[(pos.inf+1):(pos.sup-1),]
-        dados_aux5 <- data[(pos.sup+1):nrow(data),]
+        # dados_aux1 <- data[1:(pos.inf-1),]
+        # dados_aux3 <- data[(pos.inf+1):(pos.sup-1),]
+        # dados_aux5 <- data[(pos.sup+1):nrow(data),]
+        #
+        # peso_sai_inf <- inf - data[pos.inf - 1, "cum.weights"]
+        # peso_entra_inf <- data[pos.inf, "cum.weights"] - inf
+        # peso_entra_sup <- (100-sup) - data[pos.sup-1, "cum.weights"]
+        # peso_sai_sup <- data[pos.sup, "cum.weights"] - (100-sup)
+        #
+        # dados_aux2 <- rbind(data[pos.inf,],data[pos.inf,])
+        # dados_aux4 <- rbind(data[pos.sup,],data[pos.sup,])
+        #
+        # dados_aux2$weights <- c(peso_sai_inf, peso_entra_inf)
+        # dados_aux4$weights <- c(peso_entra_sup, peso_sai_sup)
+        #
+        # rownames(dados_aux2) <-  c(paste0(rownames(data[pos.inf,]),"_sai"),
+        #                            rownames(data[pos.inf,]))
+        #
+        # rownames(dados_aux4) <-  c(rownames(data[pos.sup,]),
+        #                            paste0(rownames(data[pos.sup,]),"_sai"))
+        #
+        # dados_aux <- rbind(dados_aux1, dados_aux2,
+        #                    dados_aux3, dados_aux4, dados_aux5)
+        # dados_aux$cum.weights <- cumsum(dados_aux$weights)
+        # dados_aux$conta <- 0
+        #
+        #
+        # dados_aux <- dados_aux[!is.na(dados_aux$x),]
+        #
+        # dados_aux[dados_aux$cum.weights > inf &
+        # dados_aux$cum.weights < 100 - sup |
+        # dados_aux$cum.weights == as.character(100 - sup), "conta"] <- 1
 
-        peso_sai_inf <- inf - data[pos.inf - 1, "cum.weights"]
-        peso_entra_inf <- data[pos.inf, "cum.weights"] - inf
-        peso_entra_sup <- (100-sup) - data[pos.sup-1, "cum.weights"]
-        peso_sai_sup <- data[pos.sup, "cum.weights"] - (100-sup)
+        data[pos.inf, "weights"] <- data[pos.inf, "cum.weights"] - inf
+        data[pos.sup-1, "weights"] <- (100-sup) - data[pos.sup-1, "cum.weights"]
+        data <- na.omit(data[data$cum.weights > inf & data$cum.weights < 100 - sup,])
 
-        dados_aux2 <- rbind(data[pos.inf,],data[pos.inf,])
-        dados_aux4 <- rbind(data[pos.sup,],data[pos.sup,])
+        chosen[i,rownames(data)] <- t(data$x)
 
-        dados_aux2$weights <- c(peso_sai_inf, peso_entra_inf)
-        dados_aux4$weights <- c(peso_entra_sup, peso_sai_sup)
-
-        rownames(dados_aux2) <-  c(paste0(rownames(data[pos.inf,]),"_sai"),
-                                   rownames(data[pos.inf,]))
-
-        rownames(dados_aux4) <-  c(rownames(data[pos.sup,]),
-                                   paste0(rownames(data[pos.sup,]),"_sai"))
-
-        dados_aux <- rbind(dados_aux1, dados_aux2,
-                           dados_aux3, dados_aux4, dados_aux5)
-        dados_aux$cum.weights <- cumsum(dados_aux$weights)
-        dados_aux$conta <- 0
-
-
-        dados_aux <- dados_aux[!is.na(dados_aux$x),]
-
-        dados_aux[dados_aux$cum.weights > inf &
-                      dados_aux$cum.weights < 100 - sup |
-                      dados_aux$cum.weights == as.character(100 - sup), "conta"] <- 1
-
-        entrou_vari <- subset(dados_aux, subset = dados_aux$conta == 1)
-        entrou[i,rownames(entrou_vari)] <- t(entrou_vari$x)
-
-        for(j in rownames(subset(dados_aux, dados_aux$conta == 1))){
-            new.weights[i,j] <- dados_aux[j,"weights"]
+        for(j in rownames(data)){
+            new.weights[i,j] <- data[j,"weights"]
         }
 
     }
 
-    new.weights2 <- new.weights/rowSums(new.weights,na.rm = T)*100
+    new.weights <- new.weights/rowSums(new.weights,na.rm = T)
+    core <- ts(rowSums(new.weights*subits.var, na.rm = T), start = start(subits.var), frequency = 12)
 
-    core <- ts(rowSums(new.weights2*subits.var, na.rm = T)/100, start = start(subits.var), frequency = 12)
-
-    return(invisible(list(core = core, var_in = entrou)))
+    return(list(core = core, chosen = chosen))
 }
 
