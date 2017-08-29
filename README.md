@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/fernote7/Inflation.svg?branch=master)](https://travis-ci.org/fernote7/Inflation) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/Inflation)](https://CRAN.R-project.org/package=Inflation) [![downloads](http://cranlogs.r-pkg.org/badges/Inflation)](https://cran.rstudio.com/web/packages/Inflation/index.html) ![Build Status](https://ci.appveyor.com/api/projects/status/github/fernote7/Inflation?branch=master&svg=true)
 
-
+[![Codecov](https://img.shields.io/codecov/c/github/fernote7/INFLATION.svg)]()
 
 # Inflation
 Inflation provides access to core inflation functions. Four different core inflation 
