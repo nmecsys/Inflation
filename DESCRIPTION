@@ -1,8 +1,8 @@
-Package: INFLATION
+Package: Inflation
 Type: Package
 Title: Core Inflation
 Version: 0.1.0
-Date: 2017-08-28
+Date: 2017-08-29
 Authors@R: c(person("Pedro", "Costa Ferreira", email = "pedro.guilherme@fgv.br", role = c("aut", "cre")),
               person("Daiane", "Marcolino", email = "daiane.marcolino@fgv.br", role = "aut"),  
               person("Talitha", "Speranza", email = "talitha.speranza@fgv.br", role = "aut"),
@@ -23,6 +23,6 @@ Author: Pedro Costa Ferreira [aut, cre],
   Talitha Speranza [aut],
   Fernando Teixeira [aut]
 NeedsCompilation: no
-BugReports: https://github.com/fernote7/INFLATION/issues
-URL: https://github.com/fernote7/INFLATION
+BugReports: https://github.com/fernote7/Inflation/issues
+URL: https://github.com/fernote7/Inflation
 Suggests: covr
