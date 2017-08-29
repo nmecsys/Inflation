@@ -4,7 +4,7 @@ require(Inflation)
 
 ipca <- Inflation::ipca_sub
 
-nuc <- INFL.core_dw(infl.var = ipca$ipca_index,
+nuc <- Inflation::INFL.core_dw(infl.var = ipca$ipca_index,
                subits.var = ipca$ipca_ts,
                weights = ipca$weights_ts,
                wind = 12)
@@ -13,5 +13,5 @@ nuc <- INFL.core_dw(infl.var = ipca$ipca_index,
 
 require(Inflation)
 
-ipca <- ipca_item
-nuc <- INFL.core_dw(ipca$ipca_index, ipca$ipca_ts, ipca$weights_ts, wind = 12)
+ipca <- Inflation::ipca_item
+nuc <- Inflation::INFL.core_dw(ipca$ipca_index, ipca$ipca_ts, ipca$weights_ts, wind = 12)

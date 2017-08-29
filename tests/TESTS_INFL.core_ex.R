@@ -6,7 +6,7 @@ require(Inflation)
 ipca <- Inflation::ipca_sub
 
 # Call INFL.core_ex
-ipc.ex1 <- INFL.core_ex(subits.var = ipca$ipca_ts,
+ipc.ex1 <- Inflation::INFL.core_ex(subits.var = ipca$ipca_ts,
                         weights = ipca$weights_ts,
                         info = ipca$cod,
                         n.blocks = 4,
@@ -30,10 +30,10 @@ ipc.ex1 <- INFL.core_ex(subits.var = ipca$ipca_ts,
 
 ## -- EXAMPLE 3
 
-ipca <- ipca_sub
+ipca <- Inflation::ipca_sub
 
 #' codigos <- codigos[1:373,]
-nuc <- INFL.core_ex(subits.var = ipca$ipca_ts,
+nuc <- Inflation::INFL.core_ex(subits.var = ipca$ipca_ts,
                     weights = ipca$weights_ts,
                     info = ipca$cod)
 
