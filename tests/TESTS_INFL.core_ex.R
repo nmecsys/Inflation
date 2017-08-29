@@ -1,5 +1,7 @@
 ## -- EXAMPLE 1
 
+require(Inflation)
+
 # Once the package is built, file path is not needed
 ipca <- Inflation::ipca_sub
 
