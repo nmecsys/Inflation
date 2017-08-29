@@ -10,5 +10,5 @@ alongside the new Triple Filter method <https://goo.gl/UYLhcj>.
 ## Installation
 
 ```R
-install.packages("BETS") 
+install.packages("INFLATION") 
 ```
