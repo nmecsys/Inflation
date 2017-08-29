@@ -1,7 +1,7 @@
 ## -- EXAMPLE 1
 
 # Once the package is built, file path is not needed
-ipca <- ipca_sub
+ipca <- Inflation::ipca_sub
 
 # Call INFL.core_ex
 ipc.ex1 <- INFL.core_ex(subits.var = ipca$ipca_ts,

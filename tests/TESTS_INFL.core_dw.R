@@ -1,6 +1,6 @@
 ## -- EXAMPLE 1
 
-ipca <- ipca_sub
+ipca <- Inflation::ipca_sub
 
 nuc <- INFL.core_dw(infl.var = ipca$ipca_index,
                subits.var = ipca$ipca_ts,
