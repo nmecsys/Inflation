@@ -8,6 +8,10 @@
 #' @return A \code{ts} object.
 #' @keywords core weight
 #' @export
+#' @examples
+#' ipca <- Inflation::ipca_item
+#' nuc <- Inflation::INFL.core_dw(ipca$ipca_index, ipca$ipca_ts, ipca$weights_ts, wind = 12)
+
 
 INFL.core_dw <- function(infl.var, subits.var, weights, wind = 12){
 

@@ -21,5 +21,14 @@ INFL.core_ex(subits.var, weights, info, n.blocks = 4, alpha = 2)
 \description{
 Computes the core inflation using the subitem exclusion method
 }
+\examples{
+ipca <- Inflation::ipca_sub
+ipc.ex1 <- Inflation::INFL.core_ex(subits.var = ipca$ipca_ts,
+                                   weights = ipca$weights_ts,
+                                   info = ipca$cod,
+                                   n.blocks = 4,
+                                   alpha = 2)
+
+}
 \keyword{core}
 \keyword{exclusion}

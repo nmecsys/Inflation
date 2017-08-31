@@ -13,12 +13,11 @@
 #' @keywords core triple filter
 #' @export
 #' @examples
-#' \dontrun{
-#' ipca <- ipca_get(group = "subitem")
+#' ipca <- ipca_sub
 #' INFL.core_tf(subits.var=ipca$ipca_ts, weights = ipca$weights_ts)
 #'
 #'
-#' }
+#'
 
 
 INFL.core_tf <- function(subits.var, weights, smoo, inf = 20, sup = 20, wind = 12, x11 = NULL, ...){

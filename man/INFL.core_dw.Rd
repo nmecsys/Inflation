@@ -21,5 +21,9 @@ A \code{ts} object.
 \description{
 Computes the double weighted core inflation
 }
+\examples{
+ipca <- Inflation::ipca_item
+nuc <- Inflation::INFL.core_dw(ipca$ipca_index, ipca$ipca_ts, ipca$weights_ts, wind = 12)
+}
 \keyword{core}
 \keyword{weight}

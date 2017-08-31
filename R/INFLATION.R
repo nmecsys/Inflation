@@ -1,7 +1,7 @@
 #' @title An R package providing tools for those who want to figure out the core inflation of their series.
 #'
 #'
-#' @description The INFLATION package provides tools that allow its user to better understand core inflation.
+#' @description The Inflation package provides tools that allow its user to better understand core inflation.
 #'
 #' The package provides a set of functions that compute the core inflation based on items that are part of
 #' an inflation index. Currently, the package allows for four different core inflation computations
@@ -12,7 +12,7 @@
 #'
 #' @note The authors would like to thank the support by the Getulio
 #' Vargas Foundation (FGV) and make it clear that all
-#' data in the package is in public domain. We reaffirm that INFLATION
+#' data in the package is in public domain. We reaffirm that Inflation
 #' is mainly intended for academic usage.
 #'
 #'
@@ -23,7 +23,7 @@
 #'
 #'
 #' @docType package
-#' @name INFLATION
+#' @name Inflation
 #' @keywords inflation bacen bcb economics core
 
 NULL

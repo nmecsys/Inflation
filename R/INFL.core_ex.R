@@ -8,6 +8,15 @@
 #' @keywords core exclusion
 #' @encoding utf8
 #' @export
+#' @examples
+#' ipca <- Inflation::ipca_sub
+#' ipc.ex1 <- Inflation::INFL.core_ex(subits.var = ipca$ipca_ts,
+#'                                    weights = ipca$weights_ts,
+#'                                    info = ipca$cod,
+#'                                    n.blocks = 4,
+#'                                    alpha = 2)
+#'
+
 
 INFL.core_ex <- function(subits.var, weights, info, n.blocks = 4, alpha = 2){
 
