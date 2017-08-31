@@ -26,6 +26,10 @@ and the variables that were used to calculate the means.
 \description{
 Computes the trimmed means core inflation
 }
+\examples{
+ipca_sub <- Inflation::ipca_sub
+nuc <- Inflation::INFL.core_tm(subits.var = ipca_sub$ipca_ts, weights = ipca_sub$weights_ts)
+}
 \keyword{average}
 \keyword{core}
 \keyword{mean}

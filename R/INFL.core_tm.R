@@ -12,6 +12,10 @@
 #'
 #' @keywords core trimmed mean average moving
 #' @export
+#' @examples
+#' ipca_sub <- Inflation::ipca_sub
+#' nuc <- Inflation::INFL.core_tm(subits.var = ipca_sub$ipca_ts, weights = ipca_sub$weights_ts)
+
 
 INFL.core_tm <- function(subits.var, weights, smoo, inf = 20, sup = 20, wind = 12){
 
