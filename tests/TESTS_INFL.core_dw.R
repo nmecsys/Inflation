@@ -1,13 +1,17 @@
 ## -- EXAMPLE 1
 
-ipca <- ipca_get(group = "subitem")
+require(Inflation)
 
-nuc <- core.dw(infl.var = ipca$ipca_index,
+ipca <- Inflation::ipca_sub
+
+nuc <- Inflation::INFL.core_dw(infl.var = ipca$ipca_index,
                subits.var = ipca$ipca_ts,
                weights = ipca$weights_ts,
                wind = 12)
 
 ## -- EXAMPLE 2
 
-ipca <- ipca_get(group = "item")
-nuc <- INFL.core_dw(ipca$ipca_index, ipca$ipca_ts, ipca$weights_ts, wind = 12)
+require(Inflation)
+
+ipca <- Inflation::ipca_item
+nuc <- Inflation::INFL.core_dw(ipca$ipca_index, ipca$ipca_ts, ipca$weights_ts, wind = 12)
