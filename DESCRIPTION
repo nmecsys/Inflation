@@ -23,6 +23,6 @@ Author: Pedro Costa Ferreira [aut, cre],
  Talitha Speranza [aut],
  Fernando Teixeira [aut]
 NeedsCompilation: no
-BugReports: https://github.com/fernote7/Inflation/issues
-URL: https://github.com/fernote7/Inflation
+BugReports: https://github.com/nmecsys/Inflation/issues
+URL: https://github.com/nmecsys/Inflation
 Suggests: covr
