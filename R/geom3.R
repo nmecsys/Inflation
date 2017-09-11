@@ -1,4 +1,12 @@
-# acumulada em três meses + anualizar
+#' @title Accumulate (3 months) and annualize
+#'
+#' @description !! DESCREVER
+#'
+#' @param x Time series
+#' @param anual Should the series be annualized?
+#'
+#' @author Talitha Speranza \email{talitha.speranza@fgv.br}, Fernando Teixeira \email{fernando.teixeira@fgv.br}, Daiane Marcolino \email{daiane.marcolino@fgv.br}
+
 geom3 <- function(x, anual = F){
     # x: ts
     n <- length(x)

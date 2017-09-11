@@ -16,7 +16,7 @@
 #'                                    n.blocks = 4,
 #'                                    alpha = 2)
 #'
-
+#' @author Talitha Speranza \email{talitha.speranza@fgv.br}, Fernando Teixeira \email{fernando.teixeira@fgv.br}, Daiane Marcolino \email{daiane.marcolino@fgv.br}
 
 INFL.core_ex <- function(subits.var, weights, info, n.blocks = 4, alpha = 2){
 

@@ -8,6 +8,9 @@
 #' @param alpha Significance level.
 #' @encoding utf8
 #' @importFrom stats end sd start time ts window is.mts na.omit
+#'
+#' @author Talitha Speranza \email{talitha.speranza@fgv.br}, Fernando Teixeira \email{fernando.teixeira@fgv.br}, Daiane Marcolino \email{daiane.marcolino@fgv.br}
+
 
 vol.mat <- function(x, info, n.blocks, alpha){
 

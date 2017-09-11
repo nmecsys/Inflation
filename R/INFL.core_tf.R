@@ -16,9 +16,7 @@
 #' ipca <- ipca_sub
 #' INFL.core_tf(subits.var=ipca$ipca_ts, weights = ipca$weights_ts)
 #'
-#'
-#'
-
+#' @author Talitha Speranza \email{talitha.speranza@fgv.br}, Fernando Teixeira \email{fernando.teixeira@fgv.br}, Daiane Marcolino \email{daiane.marcolino@fgv.br}
 
 INFL.core_tf <- function(subits.var, weights, smoo, inf = 20, sup = 20, wind = 12, x11 = NULL, ...){
 
