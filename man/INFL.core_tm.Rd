@@ -29,6 +29,10 @@ Computes the trimmed means core inflation
 \examples{
 ipca_sub <- Inflation::ipca_sub
 nuc <- Inflation::INFL.core_tm(subits.var = ipca_sub$ipca_ts, weights = ipca_sub$weights_ts)
+
+}
+\author{
+Talitha Speranza \email{talitha.speranza@fgv.br}, Fernando Teixeira \email{fernando.teixeira@fgv.br}, Daiane Marcolino \email{daiane.marcolino@fgv.br}
 }
 \keyword{average}
 \keyword{core}

@@ -30,5 +30,8 @@ ipc.ex1 <- Inflation::INFL.core_ex(subits.var = ipca$ipca_ts,
                                    alpha = 2)
 
 }
+\author{
+Talitha Speranza \email{talitha.speranza@fgv.br}, Fernando Teixeira \email{fernando.teixeira@fgv.br}, Daiane Marcolino \email{daiane.marcolino@fgv.br}
+}
 \keyword{core}
 \keyword{exclusion}

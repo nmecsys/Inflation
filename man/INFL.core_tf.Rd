@@ -35,8 +35,9 @@ Computes the triple filter core inflation
 ipca <- ipca_sub
 INFL.core_tf(subits.var=ipca$ipca_ts, weights = ipca$weights_ts)
 
-
-
+}
+\author{
+Talitha Speranza \email{talitha.speranza@fgv.br}, Fernando Teixeira \email{fernando.teixeira@fgv.br}, Daiane Marcolino \email{daiane.marcolino@fgv.br}
 }
 \keyword{core}
 \keyword{filter}

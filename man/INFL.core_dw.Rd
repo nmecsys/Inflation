@@ -24,6 +24,10 @@ Computes the double weighted core inflation
 \examples{
 ipca <- Inflation::ipca_item
 nuc <- Inflation::INFL.core_dw(ipca$ipca_index, ipca$ipca_ts, ipca$weights_ts, wind = 12)
+
+}
+\author{
+Talitha Speranza \email{talitha.speranza@fgv.br}, Fernando Teixeira \email{fernando.teixeira@fgv.br}, Daiane Marcolino \email{daiane.marcolino@fgv.br}
 }
 \keyword{core}
 \keyword{weight}

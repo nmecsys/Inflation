@@ -19,3 +19,6 @@ vol.mat(x, info, n.blocks, alpha)
 \description{
 !! DESCREVER O QUE É A MATRIZ
 }
+\author{
+Talitha Speranza \email{talitha.speranza@fgv.br}, Fernando Teixeira \email{fernando.teixeira@fgv.br}, Daiane Marcolino \email{daiane.marcolino@fgv.br}
+}
