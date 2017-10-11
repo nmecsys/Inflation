@@ -1,0 +1,61 @@
+---
+title: "Inflation: Próximos Passos"
+author:
+  - name: Talitha F. Speranza
+    affiliation: Instituto Brasileiro de Economia (IBRE)
+    address: Fundação Getúlio Vargas (FGV)
+    email:  talitha.speranza@fgv.br
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{"Inflation Cores Dashboard"}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: biblio.bib
+header-includes:
+  - \usepackage[portuguese]{babel}
+---
+
+## Introdução
+
+@bcb e @figueiredo
+
+## Funções de Avaliação dos Núcleos
+
+o Inflation contará com diversas funções de avaliação dos núcleos calculados através do pacote ou fornecidos pelo usuário. Essas funções poderão ser executadas individualmente ou em lote, através de um relatório automatizado, que escolherá dinamicamente as funções a serem utilizadas. 
+
+O relatório de avaliação seguirá, inicialmente, a abordagem de @ferreira. Uma tabela com a estrutura abaixo será criada, a fim de comparar as estatísticas descritivas do índice de inflação e do núcleo em estudo:
+
+```{r echo = F}
+knitr::kable(data.frame(" " = c("Nome do Índice","Nome do Núcleo"), "Mean" = c("X","X"), "Median" = c("X","X"), "Standard Deviation" = c("X","X"), "RMSE" = c("X","X")))
+
+```
+
+Esta tabela será a saída de uma função do pacote, `infl.desc_stat`. O RMSE será calculado em relação à tendência do índice de inflação.
+
+Em seguida, o relatório exibirá uma segunda tabela, contendo os resultados dos testes de sazonalidade do tipo QS [@census], que será o produto da função `infl.qs_test`. Ela terá o seguinte formato:
+
+```{r echo = F}
+knitr::kable(data.frame(" " = c("Nome do Índice","Nome do Núcleo"), "QS Stat" = c("X","X"), "P-Value" = c("X","X")))
+```
+
+Seguindo @castelar, testes de dickey-fuller e cointegracao
+
+### Séries Estacionárias
+
+@mehra
+
+- Ausência de viés
+- Dinámica de ajustamento (aderência)
+- Previsão fora da amostra (ARMA)
+- Teste DM e do sinal para ver se as previsoes sao estatisticametne diferentes, pois nao podem ser.
+
+### Séries Não Estacionárias e Cointegradas
+
+@ribba e @marques
+
+## Outras Ideias
+
+@figueiredo
+
+--- 
