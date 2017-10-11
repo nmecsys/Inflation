@@ -18,11 +18,13 @@ header-includes:
 
 ## Introdução
 
-@bcb e @figueiredo
+O pacote `Inflation` [@Inflation] para o R disponibiliza funções para calcular diversos tipos de núcleo de inflação. Três destas metodologias são utilizadas pelo Banco Central do Brasil há vários anos: médias aparadas, exclusão e dupla ponderação [@bcb]. Uma quarta metodologia, mais nova, também foi introduzida no pacote, a triplo filtro, criada por @ferreira. 
+
+Este documento descreve brevemente as funções que entrarão em versões futuras do `Inflation`.
 
 ## Funções de Avaliação dos Núcleos
 
-o Inflation contará com diversas funções de avaliação dos núcleos calculados através do pacote ou fornecidos pelo usuário. Essas funções poderão ser executadas individualmente ou em lote, através de um relatório automatizado, que escolherá dinamicamente as funções a serem utilizadas. 
+o `Inflation` contará com diversas funções de avaliação dos núcleos calculados através do pacote ou fornecidos pelo usuário. Essas funções poderão ser executadas individualmente ou em lote, através de um relatório automatizado, que escolherá dinamicamente as funções a serem utilizadas. 
 
 O relatório de avaliação seguirá, inicialmente, a abordagem de @ferreira. Uma tabela com a estrutura abaixo será criada, a fim de comparar as estatísticas descritivas do índice de inflação e do núcleo em estudo:
 
@@ -33,29 +35,28 @@ knitr::kable(data.frame(" " = c("Nome do Índice","Nome do Núcleo"), "Mean" = c
 
 Esta tabela será a saída de uma função do pacote, `infl.desc_stat`. O RMSE será calculado em relação à tendência do índice de inflação.
 
-Em seguida, o relatório exibirá uma segunda tabela, contendo os resultados dos testes de sazonalidade do tipo QS [@census], que será o produto da função `infl.qs_test`. Ela terá o seguinte formato:
+Em seguida, o relatório exibirá uma segunda tabela, contendo os resultados dos testes de sazonalidade do tipo QS [@census], que será o produto da função `infl.qs_test`. Ela terá o formato abaixo.
 
 ```{r echo = F}
 knitr::kable(data.frame(" " = c("Nome do Índice","Nome do Núcleo"), "QS Stat" = c("X","X"), "P-Value" = c("X","X")))
 ```
 
-Seguindo @castelar, testes de dickey-fuller e cointegracao
+Seguindo @castelar, o pacote aplica testes de raiz unitária em cada série individualmente. O teste poderá ser escolhido pelo usuário dentre as opções diponíveis na função `BETS.ur_test` do pacote @BETS. Então, ambas as séries são testadas para cointegração [@johanssen]
 
 ### Séries Estacionárias
 
-@mehra
+Caso as duas séries seja estacionárias, o estudo de @mehra passará a guiar a execução dos testes. Os núcleos serão avaliados quanto a(o)
 
-- Ausência de viés
-- Dinámica de ajustamento (aderência)
-- Previsão fora da amostra (ARMA)
-- Teste DM e do sinal para ver se as previsoes sao estatisticametne diferentes, pois nao podem ser.
+- Ausência de viés (função `infl.bias_test`)
+- Dinâmica de ajustamento (função `infl.fit_dyn`)
+- Previsão fora da amostra e teste DM [@diebold] para verificar se as previsões são estatisticamente diferentes (funções `infl.out_samp` e `infl.dm_test`)
 
 ### Séries Não Estacionárias e Cointegradas
 
-@ribba e @marques
+Caso as séries sejam não estacionárias e cointegradas, o relatório dinâmico executará funções de avaliação baseadas nos trabalhos de @ribba e @marques.
 
 ## Outras Ideias
 
-@figueiredo
+O pacote poderá, ainda, contar com funções inspiradas em @figueiredo.
 
 --- 
