@@ -1,8 +1,8 @@
 ---
 title: "Inflation Cores Dashboard"
-subtitle: "Using Inflation and BETS to produce a dashboard of core inflation measures"
+subtitle: "Using Inflation and BETS to produce a dashboard of core inflation measurements"
 author:
-  - name: Talitha F. Speranza
+  - name: Inflation R Package
     affiliation: Instituto Brasileiro de Economia (IBRE)
     address: Fundação Getúlio Vargas (FGV)
     email:  talitha.speranza@fgv.br
