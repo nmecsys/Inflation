@@ -1,0 +1,11 @@
+---
+title: "Core Inflation Measurement Evaluation"
+author: "inflation Package"
+date: "`r Sys.Date()`"
+output: html_document
+params:
+  core: !r NA
+  index: !r NA
+---
+
+
