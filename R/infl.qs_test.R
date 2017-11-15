@@ -16,8 +16,11 @@ infl.qs_test <- function(index, core, nms = NULL){
 
     stats <- data.frame(matrix(ncol = 2, nrow = 2))
 
-    indx.qs <- qs(seas(index))
-    core.qs <- qs(seas(core))
+    suppressMessages(indx.qs <- qs(seas(index)))
+    suppressMessages(core.qs <- qs(seas(core)))
+
+    stats[1,] <- indx.qs[1,]
+    stats[2,] <- core.qs[1,]
 
     if(!is.null(nms)){
         rownames(stats) <- nms
