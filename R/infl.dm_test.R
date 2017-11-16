@@ -58,6 +58,9 @@ infl.dm_test <- function(index, core, act.index, act.core, h = 12, arma = NULL, 
     e2 = preds.core - act.core
 
     dm = dm.test(e1, e2, h = h, alternative = alt)
+    dm = data.frame(Statistic = dm$statistic, P.Value = dm$p.value)
 
-    return(data.frame(Statistic = dm$statistic, P.Value = dm$p.value))
+    ret = list(test = dm, preds.index = preds.index, preds.core = preds.core)
+
+    return(ret)
 }
