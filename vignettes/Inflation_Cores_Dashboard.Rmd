@@ -32,6 +32,13 @@ BETS.search("ipca ~ -", unit = "Monthly % var.", view = F)
 ipca <- window(BETS.get(433), start = c(2012,1), end = c(2016,12)) 
 ```
 
+
+```{r}
+ipca_sub <- ipca_get(group = "subitem")
+```
+
+
+
 ```{r eval = F}
 charts.opts <- list()
 

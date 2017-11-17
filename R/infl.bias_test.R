@@ -5,7 +5,7 @@
 #'
 #' @keywords
 #'
-#' @import dymlm
+#' @import dynlm
 #' @export
 #' @examples
 #'
