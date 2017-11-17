@@ -57,7 +57,7 @@ infl.dm_test <- function(index, core, act.index, act.core, h = 12, arma = NULL, 
     e1 = preds.index - act.index
     e2 = preds.core - act.core
 
-    dm = dm.test(e1, e2, h = h, alternative = alt)
+    dm = suppressWarnings(dm.test(e1, e2, h = h, alternative = alt))
     dm = data.frame(Statistic = dm$statistic, P.Value = dm$p.value)
 
     ret = list(test = dm, preds.index = preds.index, preds.core = preds.core)
