@@ -4,7 +4,7 @@ subtitle: "Using Inflation and BETS to produce a dashboard of core inflation mea
 author:
   - name: Inflation R Package
     affiliation: Instituto Brasileiro de Economia (IBRE)
-    address: Fundação Getúlio Vargas (FGV)
+    address: Fundação Getulio Vargas (FGV)
     email:  talitha.speranza@fgv.br
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
