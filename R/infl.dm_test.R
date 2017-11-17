@@ -19,8 +19,8 @@ infl.dm_test <- function(index, core, act.index, act.core, h = 12, arma = NULL, 
 
         model.index = auto.arima(index)
         arma = model.index$arma
-        ord = c(arma[1],arma[5],arma[2])
-        sea = c(arma[3],arma[6],arma[4])
+        ord = c(arma[1],arma[6],arma[2])
+        sea = c(arma[3],arma[7],arma[4])
 
 
     } else {
@@ -34,8 +34,8 @@ infl.dm_test <- function(index, core, act.index, act.core, h = 12, arma = NULL, 
 
     len = length(act.index)
     freq = frequency(index)
-    preds.index = vector(length = len)
-    preds.core = vector(length = len)
+    preds.index = NULL
+    preds.core = NULL
 
 
     for(i in 1:len){
