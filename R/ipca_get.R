@@ -22,6 +22,7 @@
 
 
 grupamento = "subgroup"
+grupamento = "subitem"
 
 ipca_get <- function(group = c("subgroup", "item", "subitem")){
 
@@ -182,10 +183,10 @@ ipca_get <- function(group = c("subgroup", "item", "subitem")){
     sequencia <- seq(from=1, to=length(t2), by=2)
 
 
-    # Loop que puxa apenas os valores associados aos subgrupos (>=5)
+    # Loop que puxa apenas os valores associados aos items 
     t3 <- c()
     for( i in sequencia){
-        if(nchar(t2[i]) == 2){
+        if(nchar(t2[i]) == 4){
             t3 <- c(t3, t2[i], t2[i+1])
         }
     }
@@ -254,7 +255,7 @@ ipca_get <- function(group = c("subgroup", "item", "subitem")){
     # Loop que puxa apenas os valores associados aos subgrupos (>=5)
     t3 <- c()
     for( i in sequencia){
-        if(nchar(t2[i]) == 4){
+        if(nchar(t2[i]) == 2){
             t3 <- c(t3, t2[i], t2[i+1])
         }
     }
@@ -285,46 +286,36 @@ ipca_get <- function(group = c("subgroup", "item", "subitem")){
                                      sections = section2, variable = 66)
     pesos <- pesos$serie_1419
 
-    colnames(tmatriz) <- c("item", "cod_item")
+    colnames(tmatriz) <- c("grupo", "cod_grupo")
 
     }
 
 # Juntando subgrupos, itens e subitens -------------------------------------------
 
-    # ipca2 <- ipca
-    # pesos2 <- pesos
 
-    #ipca <- INFLATION::ipca
-    #pesos <- INFLATION::pesos
-
-
+    
     s <- substr(ipca$`Geral, grupo, subgrupo, item e subitem`, 1, 2)
     ipca$grupo <- as.numeric(s)
-    s2 <- substr(ipca$`Geral, grupo, subgrupo, item e subitem`, 1, 4)
-    ipca$item <- as.numeric(s2)
-    s3 <- substr(ipca$`Geral, grupo, subgrupo, item e subitem`, 1, 7)
-    ipca$subitem <- as.numeric(s3)
-
+    pesos$grupo <- as.numeric(s)
+    
+    if(grupamento == "item"){
+        s2 <- substr(ipca$`Geral, grupo, subgrupo, item e subitem`, 1, 4)
+        ipca$item <- as.numeric(s2)
+        pesos$item <- as.numeric(s2)
+    } else if (grupamento == "subitem"){
+        s3 <- substr(ipca$`Geral, grupo, subgrupo, item e subitem`, 1, 7)
+        ipca$subitem <- as.numeric(s3)
+        pesos$subitem <- as.numeric(s3)
+    }
 
 
     nome <- colnames(tmatriz)[1]
 
     ipca <- dplyr::left_join(ipca, tmatriz, by = nome)
-    # ipca <- dplyr::left_join(ipca, tmatriz2)
-    # ipca <- dplyr::left_join(ipca, tmatriz3)
 
-
-
-    s <- substr(pesos$`Geral, grupo, subgrupo, item e subitem`, 1, 2)
-    pesos$grupo <- as.numeric(s)
-    s2 <- substr(pesos$`Geral, grupo, subgrupo, item e subitem`, 1, 4)
-    pesos$item <- as.numeric(s2)
-    s3 <- substr(pesos$`Geral, grupo, subgrupo, item e subitem`, 1, 7)
-    pesos$subitem <- as.numeric(s3)
 
     pesos <- dplyr::left_join(pesos, tmatriz, by = nome)
-    # pesos <- dplyr::left_join(pesos, tmatriz2)
-    # pesos <- dplyr::left_join(pesos, tmatriz3)
+
 
 
 
@@ -342,32 +333,6 @@ ipca_get <- function(group = c("subgroup", "item", "subitem")){
 
 
 
-    ipca$mes[ipca$mes == "janeiro"] <- "01"
-    ipca$mes[ipca$mes == "fevereiro"] <- "02"
-    ipca$mes[ipca$mes == "mar\u00E7o"] <- "03"
-    ipca$mes[ipca$mes == "abril"] <- "04"
-    ipca$mes[ipca$mes == "maio"] <- "05"
-    ipca$mes[ipca$mes == "junho"] <- "06"
-    ipca$mes[ipca$mes == "julho"] <- "07"
-    ipca$mes[ipca$mes == "agosto"] <- "08"
-    ipca$mes[ipca$mes == "setembro"] <- "09"
-    ipca$mes[ipca$mes == "outubro"] <- "10"
-    ipca$mes[ipca$mes == "novembro"] <- "11"
-    ipca$mes[ipca$mes == "dezembro"] <- "12"
-
-    pesos$mes[pesos$mes == "janeiro"] <- "01"
-    pesos$mes[pesos$mes == "fevereiro"] <- "02"
-    pesos$mes[pesos$mes == "mar\u00E7o"] <- "03"
-    pesos$mes[pesos$mes == "abril"] <- "04"
-    pesos$mes[pesos$mes == "maio"] <- "05"
-    pesos$mes[pesos$mes == "junho"] <- "06"
-    pesos$mes[pesos$mes == "julho"] <- "07"
-    pesos$mes[pesos$mes == "agosto"] <- "08"
-    pesos$mes[pesos$mes == "setembro"] <- "09"
-    pesos$mes[pesos$mes == "outubro"] <- "10"
-    pesos$mes[pesos$mes == "novembro"] <- "11"
-    pesos$mes[pesos$mes == "dezembro"] <- "12"
-
     ipca$mes_ano <- paste0(ipca$ano, "-",ipca$mes, "-01")
     ipca$mes_ano <- as.Date(ipca$mes_ano)
     pesos$mes_ano <- paste0(pesos$ano, "-",pesos$mes, "-01")
@@ -376,26 +341,22 @@ ipca_get <- function(group = c("subgroup", "item", "subitem")){
 
 
 
-    # library(tidyr)
-
-
-    ipca <- cbind(ipca[,length(ipca[1,])], ipca[,4:11])
-    ipca <- tibble::as_data_frame(ipca)
+    ipca <- cbind(ipca[,length(ipca[1,])], ipca[,4:9])
     ipca_wide <- tidyr::spread(ipca, key = mes_ano, value = Valor)
     ipca_wide <- ipca_wide[,6:length(ipca_wide[1,])]
+    
 
 
 
-    ipca_wide_t <- tibble::as_data_frame(t(ipca_wide[,3:length(ipca_wide)]))
-    colnames(ipca_wide_t) <- paste0("cod_",unlist(ipca_wide[,1]))
+    ipca_wide_t <- tibble::as_data_frame(t(ipca_wide[,1:length(ipca_wide)]))
+    colnames(ipca_wide_t) <- paste0("cod_",unlist(tmatriz[,1]))
     ipca_final <- ipca_wide_t
 
-    pesos <- cbind(pesos[,length(pesos[1,])], pesos[,4:11])
-    pesos <- tibble::as_data_frame(pesos)
+    pesos <- cbind(pesos[,length(pesos[1,])], pesos[,4:9])
     pesos_wide <- tidyr::spread(pesos, key = mes_ano, value = Valor)
     pesos_wide <- pesos_wide[,6:length(pesos_wide[1,])]
     pesos_wide_t <- tibble::as_data_frame(t(pesos_wide[,3:length(pesos_wide)]))
-    colnames(pesos_wide_t) <- paste0("cod_",unlist(pesos_wide[,1]))
+    colnames(pesos_wide_t) <- paste0("cod_",unlist(tmatriz[,1]))
     pesos_final <- pesos_wide_t
 
     ipca_ts = ts(ipca_final, start = c(2012,01),
@@ -406,9 +367,6 @@ ipca_get <- function(group = c("subgroup", "item", "subitem")){
                           as.numeric(c(format(Sys.Date(), "%m")))), frequency = 12)
 
 
-
-    # IPCA geral
-    # browser()
 
     geral <- ts(geral$serie_1419[7], start = c(2012,01),
                 end = c(as.numeric(format(Sys.Date(), "%Y")),
@@ -430,7 +388,7 @@ ipca_get <- function(group = c("subgroup", "item", "subitem")){
 
 
 
-# a <- ipca_get(group = "subitem")
+# a <- ipca_get(group = "item")
 
 # as.Date(time(a$ipca_agrupado))
 
