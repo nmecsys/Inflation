@@ -1,0 +1,28 @@
+Package: Inflation
+Type: Package
+Title: Core Inflation
+Version: 0.1.0
+Date: 2017-08-29
+Authors@R: c(person("Pedro", "Costa Ferreira", email = "pedro.guilherme@fgv.br", role = c("aut", "cre")),
+ person("Daiane", "Marcolino", email = "daiane.marcolino@fgv.br", role = "aut"), 
+ person("Talitha", "Speranza", email = "talitha.speranza@fgv.br", role = "aut"),
+			 person("Fernando", "Teixeira", email = "fernando.teixeira@fgv.br", role = "aut"))
+Maintainer: Pedro Costa Ferreira <pedro.guilherme@fgv.br>
+Description: Provides access to core inflation functions. Four different core inflation 
+ functions are provided. The well known trimmed means, exclusion and double weighing methods, 
+ alongside the new Triple Filter method introduced in Ferreira et al. (2016) <https://goo.gl/UYLhcj>.
+Depends:
+ R (>= 3.3.1)
+License: BSD_3_clause + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Imports: seasonal, Metrics, BETS, dplyr, dynlm, ecoseries, forecast, tibble, tidyr, vars
+Author: Pedro Costa Ferreira [aut, cre],
+ Daiane Marcolino [aut],
+ Talitha Speranza [aut],
+ Fernando Teixeira [aut]
+NeedsCompilation: no
+BugReports: https://github.com/nmecsys/Inflation/issues
+URL: https://github.com/nmecsys/Inflation
+Suggests: covr
