@@ -7,6 +7,7 @@
 #'
 #' @importFrom Metrics rmse
 #' @importFrom forecast ma
+#' @importFrom stats mean median frequency
 #' @export
 #' @examples
 #'
