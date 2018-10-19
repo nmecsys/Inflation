@@ -6,7 +6,8 @@
 #' @keywords
 #'
 #' @importFrom forecast dm.test auto.arima Arima
-#' @importFrom BETS BETS.predict
+#' @importFrom BETS predict
+#' @importFrom stats frequency median
 #' @export
 #' @examples
 #'
