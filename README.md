@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/fernote7/Inflation.svg?branch=master)](https://travis-ci.org/fernote7/Inflation) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/Inflation)](https://CRAN.R-project.org/package=Inflation) [![downloads](http://cranlogs.r-pkg.org/badges/Inflation)](https://cran.rstudio.com/web/packages/Inflation/index.html) ![Build Status](https://ci.appveyor.com/api/projects/status/github/fernote7/Inflation?branch=master&svg=true)
-
+![CRAN](https://img.shields.io/cran/l/Inflation.svg)
 [![codecov](https://codecov.io/gh/fernote7/Inflation/branch/master/graph/badge.svg)](https://codecov.io/gh/fernote7/Inflation)
 
 # Inflation
